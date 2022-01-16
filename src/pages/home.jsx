@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import NavBar from './../components/navbar';
+import Navbar from './../components/Navbar';
 import Intro from './../components/intro';
 import styled from 'styled-components';
 import { userContext } from "../userContext";
@@ -17,7 +17,7 @@ const Home = () => {
   
   return (
     <Container>
-      <NavBar/>
+      <Navbar/>
       {/* <div>{msg}</div> */}
       <Intro/>
     </Container>
