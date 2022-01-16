@@ -18,7 +18,7 @@ const Card = ({item}) => {
   return (
       
     <Container>
-        <CourseName>item.name</CourseName>
+        <CourseName>{item.name}</CourseName>
     </Container>
   );
 };
