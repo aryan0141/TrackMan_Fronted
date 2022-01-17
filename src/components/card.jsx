@@ -12,6 +12,7 @@ const CourseName = styled.h1`
 
 `
 
+
 const Card = ({item}) => {
 
     console.log(item)
