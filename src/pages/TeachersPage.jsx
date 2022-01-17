@@ -2,14 +2,9 @@ import React, { useState , useEffect,useContext} from "react";
 import styled from 'styled-components';
 import axios from 'axios';
 import { userContext } from './../userContext';
-import Card from './../components/card';
-
-const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  /* overflow: hidden;
-  position: relative; */
-`
+import ClassroomCard from './../components/card';
+import Navbar from './../components/Navbar';
+import { Container, Grid } from "@mui/material";
 
 // const load = async (email) => {
 //   const resp = await axios.get(`/api/users/courseList/${email}`);
@@ -17,9 +12,6 @@ const Container = styled.div`
 //   return(resp.data);
 // }
 
-const para = styled.p`
-
-`
 
 
 const TeachersPage = () => {
@@ -73,7 +65,7 @@ const TeachersPage = () => {
   //    }
   // }, []);
 
-  console.log(resp , "ayush");
+  console.log(resp);
   
  
   // var resp = load(user.email);
@@ -83,11 +75,18 @@ const TeachersPage = () => {
   // }
 
   return (
-      
-    <Container>
-        {!isLoading ? (resp.courses && resp.courses.map((item) => (<Card item={item} key={item.id} />) ) ): <p>Loading</p>  }
-        {/* <h>{user.name}</h> */}
-    </Container>
+    <React.Fragment>
+      <Navbar />
+      <Container style={{marginTop: "50px"}}>
+        <Grid container spacing={2}>
+          {!isLoading ? (resp.courses.map((item) => (
+            <Grid key={item.id} item xs={12} sm={6} md={6} lg={4}>
+              <ClassroomCard item={item} />
+            </Grid>
+          ))) : <p>Loading</p>}
+        </Grid>
+      </Container>
+    </React.Fragment>
   );
 };
 
