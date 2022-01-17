@@ -1,62 +1,80 @@
 // import logo from './logo.svg';
 // import {GoogleLogin} from 'react-google-login';
 // import axios from 'axios';
-import './App.css';
-import { BrowserRouter as Router, Switch,Route, Redirect , useHistory} from "react-router-dom"
-import React, {useState} from 'react';
-import Home from './pages/home.jsx';
-import TeachersPage from './pages/TeachersPage';
-import { userContext } from './userContext';
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  useHistory,
+} from "react-router-dom";
+import React, { useState } from "react";
+import Home from "./pages/home.jsx";
+import TeachersPage from "./pages/TeachersPage";
+import { userContext } from "./userContext";
+import { blue, red } from "@mui/material/colors";
+// import { createTheme } from "@mui/material";
+// import { ThemeProvider } from "styled-components";
+import { createTheme } from "@mui/material";
+// import { amber, blue } from "@mui/material/colors";
+import { ThemeProvider } from "@emotion/react";
+
+const theme = createTheme({
+  palette: {
+    primary: blue,
+  },
+  typography: {
+    fontFamily: "Montserrat",
+  },
+});
 
 function App() {
   const [user, setUser] = useState(null);
   const history = useHistory();
 
   return (
-    <Router>
-      <Switch>
-        <userContext.Provider value={{user , setUser}}>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/teachersPage">
-            <TeachersPage/>
-          </Route>
-        </userContext.Provider>
-        {/* <Route path="/products/:category">
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Switch>
+          <userContext.Provider value={{ user, setUser }}>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/teachersPage">
+              <TeachersPage />
+            </Route>
+          </userContext.Provider>
+          {/* <Route path="/products/:category">
           <ProductList />
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/register">
           {user ? <Redirect to="/" /> : <Register />}
         </Route> */}
-      </Switch>
-    </Router>
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }
 
 export default App;
 
+// const responseGoogle = response =>{
+//   console.log(response);
+//   // const {code} = response;
+//   // axios.post('/api/create-tokens', {code}).then(response=>{
+//   //   console.log(response.data);
+//   // }).catch(error => console.log(error.message)
+//   // )
+// }
 
-
-  // const responseGoogle = response =>{
-  //   console.log(response);
-  //   // const {code} = response;
-  //   // axios.post('/api/create-tokens', {code}).then(response=>{
-  //   //   console.log(response.data);
-  //   // }).catch(error => console.log(error.message)
-  //   // )
-  // }
-
-  // const responseError = error => {
-  //     console.log(error);
-  // };
-
-
-
+// const responseError = error => {
+//     console.log(error);
+// };
 
 //{
-  /* <div>
+/* <div>
       <div className="App">
         <h1>Google Calendar API</h1>
       </div>
@@ -77,17 +95,8 @@ export default App;
 </div> */
 //}
 
-
-
-
-
-
-
-
-
-
-      // {
-        /* <header className="App-header">
+// {
+/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -101,4 +110,4 @@ export default App;
           Learn React
         </a>
       </header> */
-      // }
+// }
