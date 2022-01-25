@@ -1,6 +1,6 @@
 // import logo from './logo.svg';
 // import {GoogleLogin} from 'react-google-login';
-// import axios from 'axios';
+import axios from 'axios';
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -9,9 +9,10 @@ import {
   Redirect,
   useHistory,
 } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Home from "./pages/home.jsx";
 import TeachersPage from "./pages/TeachersPage";
+import Analytics from './pages/Analytics';
 import { userContext } from "./userContext";
 import { blue, red } from "@mui/material/colors";
 // import { createTheme } from "@mui/material";
@@ -19,6 +20,7 @@ import { blue, red } from "@mui/material/colors";
 import { createTheme } from "@mui/material";
 // import { amber, blue } from "@mui/material/colors";
 import { ThemeProvider } from "@emotion/react";
+import Cookies from "js-cookie";
 
 const theme = createTheme({
   palette: {
@@ -33,6 +35,32 @@ function App() {
   const [user, setUser] = useState(null);
   const history = useHistory();
 
+  const readCookie = async () =>{
+    const userInfo = Cookies.get("userInfo");
+    //const resp = await 
+    if (userInfo) {
+    axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${userInfo}`).then((resp) =>{
+          const currUser = {
+            name: resp.data.name,
+            firstName: resp.data.given_name,
+            lastName: resp.data.family_name,
+            email: resp.data.email,
+            picture: resp.data.picture,
+            access_token: userInfo,
+          };
+
+
+            setUser(currUser);
+          
+    });
+  }
+
+  }
+  useEffect(()=>{
+    readCookie();
+  }, [])
+
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
@@ -41,12 +69,18 @@ function App() {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route path="/teachersPage">
+            { user && user.email && <Route path="/teachersPage">
               <TeachersPage />
             </Route>
+            }
+            { user && user.email && <Route path="/analytics">
+              <Analytics/>
+            </Route>
+            }
           </userContext.Provider>
-          {/* <Route path="/products/:category">
-          <ProductList />
+
+
+          {/* 
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/register">
@@ -60,54 +94,3 @@ function App() {
 
 export default App;
 
-// const responseGoogle = response =>{
-//   console.log(response);
-//   // const {code} = response;
-//   // axios.post('/api/create-tokens', {code}).then(response=>{
-//   //   console.log(response.data);
-//   // }).catch(error => console.log(error.message)
-//   // )
-// }
-
-// const responseError = error => {
-//     console.log(error);
-// };
-
-//{
-/* <div>
-      <div className="App">
-        <h1>Google Calendar API</h1>
-      </div>
-      <div>
-        <GoogleLogin
-          clientId="821931130263-d6pvkrhi1tjmcrmk2tdcbhp9mpgq3sqn.apps.googleusercontent.com"
-          buttonText="SIGN IN AND AUTHORIZE"
-          onSuccess={responseGoogle}
-          onFailure={responseError}
-          cookiePolicy={"single_host_origin"}
-          responseType="code"
-          accessType="offline"
-          scope="openid email profile https://www.googleapis.com/auth/classroom.courses"
-          //prompt='consent'
-          //approval_prompt='force'
-        />
-      </div>
-</div> */
-//}
-
-// {
-/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */
-// }

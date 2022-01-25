@@ -8,6 +8,7 @@ import { userContext } from './../userContext';
 import { Button, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { Box } from "@mui/system";
+import Cookies from 'js-cookie';
 
 
 const useStyles = makeStyles({
@@ -124,17 +125,18 @@ const Intro = () => {
             const {code} = response;
             axios.post('/api/users/create-tokens', {code}).then(response=>{
                 console.log(response.data);
+                Cookies.set('userInfo', response.data.access_token , {expires: 0.04 , path:'/'});
                 //console.log(response.data.refresh_token);
                 setUser(response.data);
-    
+                //localStorage.setItem( 'userDetails' , JSON.stringify(response.data));
             })
             .catch(error => console.log(error.message)
             )
-        }
+    }
     
-        const responseError = error => {
-            console.log(error);
-        };
+    const responseError = error => {
+        console.log(error);
+    };
 
     if(user) {
         return (
@@ -167,7 +169,7 @@ const Intro = () => {
                             cookiePolicy={"single_host_origin"}
                             responseType="code"
                             accessType="offline"
-                            scope="openid email profile https://www.googleapis.com/auth/classroom.courses"
+                            scope="openid email profile https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.profile.emails"
                             //prompt='consent'
                             //approval_prompt='force'
                         /> 

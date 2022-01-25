@@ -47,7 +47,7 @@ const TeachersPage = () => {
         // return(e);
       }
     }
-    // let items = 
+    
     getItems();
     // setResp(items);
   },[])
