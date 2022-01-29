@@ -1,8 +1,7 @@
 import React, {useContext} from "react";
-import Navbar from './../components/Navbar';
-import Intro from './../components/intro';
+import Navbar from '../Navbar';
+import Intro from './Intro';
 import styled from 'styled-components';
-import { userContext } from "../userContext";
 
 
 const Container = styled.div`

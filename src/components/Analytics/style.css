@@ -1,0 +1,19 @@
+.files {
+  border: 2px dashed #a9a9a9;
+  /* height: 100px; */
+  padding: 15px 30px;
+  margin-bottom: 5px;
+  /* width: 350px; */
+}
+.files input {
+    position: absolute;
+    /* left: 0; */
+    margin: 0;
+    padding: 0;
+    width: 400px;
+    height: 90px;
+    outline: none;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
+}

@@ -10,9 +10,9 @@ import {
   useHistory,
 } from "react-router-dom";
 import React, { useState , useEffect } from "react";
-import Home from "./pages/home.jsx";
-import TeachersPage from "./pages/TeachersPage";
-import Analytics from './pages/Analytics';
+import Home from "./components/HomePage/home";
+import TeachersPage from "./components/TeachersPage/TeachersPage";
+import Analytics from './components/Analytics/Analytics';
 import { userContext } from "./userContext";
 import { blue, red } from "@mui/material/colors";
 // import { createTheme } from "@mui/material";
