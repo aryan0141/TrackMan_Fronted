@@ -1,9 +1,9 @@
 import React, { useState , useEffect,useContext} from "react";
 import styled from 'styled-components';
 import axios from 'axios';
-import { userContext } from './../userContext';
-import ClassroomCard from './../components/card';
-import Navbar from './../components/Navbar';
+import { userContext } from '../../userContext';
+import ClassroomCard from './card';
+import Navbar from '../Navbar';
 import { Container, Grid } from "@mui/material";
 
 // const load = async (email) => {
@@ -18,19 +18,8 @@ const TeachersPage = () => {
   const [isLoading , setIsLoading] = useState(true);
 
   const { user, setUser} = useContext(userContext);
-  // console.log(user);
 
   const [resp , setResp] = useState([]);
-
-  // useEffect( () => {
-  //   //const response = axios.get(`/api/users/courseList/${user.email}`);
-  //   setResp(load(user.email));
-  //   //setResp(response.data);
-  //   // load(user.email);
-  //   // return () => {     
-  //   // }
-  // }, [])
-
 
   useEffect(()=>{
     const getItems = async () => {
@@ -39,41 +28,17 @@ const TeachersPage = () => {
         const response = await axios.get(`/api/users/courseList/${user.email}`);
         setResp(response.data);
         setIsLoading(false);
-        
-        // return(response.data);
       }catch(e)
       {
         console.log("error occured  " , e)
-        // return(e);
       }
     }
     
     getItems();
-    // setResp(items);
   },[])
-
-  // useEffect(async () => {
-  //    try {
-       
-  //       setIsLoading(true);
-  //      const data = await axios.get(`/api/users/courseList/${user.email}`);
-  //      setResp(data);      
-  //      setIsLoading(false);
-  //    }catch (error) {     
-  //      setIsLoading(false);
-  //      console.log(error);
-  //    }
-  // }, []);
 
   console.log(resp);
   
- 
-  // var resp = load(user.email);
-  // if(resp)
-  // {
-  //   console.log(resp);
-  // }
-
   return (
     <React.Fragment>
       <Navbar />
