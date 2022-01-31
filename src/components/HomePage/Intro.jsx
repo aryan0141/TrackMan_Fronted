@@ -107,6 +107,7 @@ const Intro = () => {
                             cookiePolicy={"single_host_origin"}
                             responseType="code"
                             accessType="offline"
+                            prompt= "select_account"
                             scope="openid email profile https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.profile.emails"
                             //prompt='consent'
                             //approval_prompt='force'

@@ -23,6 +23,17 @@ const FileUploader = ({}) => {
       alert("Select a file first");
       return;
     }
+
+    const fileName1 = file.name;
+    var arr = fileName1.split('.');
+    var extension = arr[arr.length-1];
+    //console.log(extension);
+    if(extension !=='csv' && extension!=='sbv')
+    {
+      alert("Select a Valid .csv or .sbv type File");
+      return;
+    }
+    //console.log(file);
     setUploadBtnDisabled(true);
     e.preventDefault();
 
@@ -43,6 +54,23 @@ const FileUploader = ({}) => {
 
     axios.post("api/uploadDoc/upload", data, options).then((res) => {
       console.log(res);
+
+      //console.log(res.data.originalname);
+      
+      const fileName = String(res.data.originalname);
+      console.log(fileName);
+      // var fileName = req.files.upload.name;
+
+      axios.post(`api/uploadDoc/addClass` , {fileName}).then((e) =>{
+          console.log("Ok printed");
+      }).catch((e)=>{
+          console.log("error" , e)
+      })
+      console.log("Success");
+
+
+
+
       setUploadPercentage(100);
       setTimeout(() => {
         setUploadPercentage(0);

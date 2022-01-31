@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useContext, useEffect, useState } from "react";
+import { userContext } from "./../userContext";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -33,8 +35,11 @@ const ResponsiveAppBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  const { user, setUser } = useContext(userContext);
+  //const geeks = "https://www.w3schools.com/images/w3schools_green.jpg";
+  //console.log(user.picture);
   return (
+    
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -103,10 +108,11 @@ const ResponsiveAppBar = () => {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          {user && <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                {/* <Avatar alt="Remy Sharp" src="{user.picture}" /> */}
+                <Avatar alt="Remy Sharp" src={user.picture} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -132,6 +138,7 @@ const ResponsiveAppBar = () => {
               ))}
             </Menu>
           </Box>
+          }
         </Toolbar>
       </Container>
     </AppBar>
