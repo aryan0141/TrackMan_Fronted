@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useContext, useEffect, useState } from "react";
-import { userContext } from "./../userContext";
+import { userContext } from "../userContext";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
