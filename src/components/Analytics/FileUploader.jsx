@@ -52,7 +52,7 @@ const FileUploader = ({}) => {
       },
     };
 
-    axios.post("api/uploadDoc/upload", data, options).then((res) => {
+    axios.post("http://localhost:3000/api/uploadDoc/upload", data, options).then((res) => {
       console.log(res);
 
       //console.log(res.data.originalname);
@@ -61,7 +61,7 @@ const FileUploader = ({}) => {
       console.log(fileName);
       // var fileName = req.files.upload.name;
 
-      axios.post(`api/uploadDoc/addClass` , {fileName}).then((e) =>{
+      axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
           console.log("Ok printed");
       }).catch((e)=>{
           console.log("error" , e)

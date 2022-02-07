@@ -60,7 +60,7 @@ const ClassroomCard = ({ item }) => {
         style={{ margin: "15px" }}
         variant="contained"
         color="primary"
-        onClick={() => func}
+        onClick={func}
       >
         Click Me
       </Button>

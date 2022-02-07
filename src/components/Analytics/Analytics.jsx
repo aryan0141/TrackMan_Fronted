@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { userContext } from "../../userContext";
 import FileUploader from "./FileUploader";
 import Navbar from "../Navbar";
@@ -38,6 +39,10 @@ const cardsDetails = [
 ];
 
 const Analytics = () => {
+
+  const { courseId } = useParams();
+  //console.log(courseId);
+
   const [isLoading, setIsLoading] = useState(true);
   const { user, setUser } = useContext(userContext);
   const [resp, setResp] = useState([]);
@@ -47,8 +52,11 @@ const Analytics = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          `/api/teachers/teachersClass/136844541806`
+          // `/api/teachers/teachersClass/${courseId}`
+          `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+          //`/api/teachers/teachersClass/136844541806`
         );
+        //136844541806
         setResp(response.data);
         setIsLoading(false);
       } catch (e) {

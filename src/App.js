@@ -73,7 +73,7 @@ function App() {
               <TeachersPage />
             </Route>
             }
-            { user && user.email && <Route path="/analytics">
+            { user && user.email && <Route path="/analytics/:courseId">
               <Analytics/>
             </Route>
             }
