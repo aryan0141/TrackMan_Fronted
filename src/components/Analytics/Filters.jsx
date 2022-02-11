@@ -22,7 +22,7 @@ export const Filters = () => {
   return (
     <React.Fragment>
       <Typography
-        style={{ paddingTop: "40px" }}
+        style={{ paddingTop: "20px" }}
         variant="h5"
         color="textSecondary"
       >

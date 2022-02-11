@@ -2,6 +2,7 @@
 // import {GoogleLogin} from 'react-google-login';
 import axios from 'axios';
 import "./App.css";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import {
   BrowserRouter as Router,
   Switch,
