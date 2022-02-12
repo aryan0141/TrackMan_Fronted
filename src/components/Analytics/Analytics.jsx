@@ -13,36 +13,31 @@ import { blue, green, orange, red } from "@mui/material/colors";
 import { amber } from "@material-ui/core/colors";
 import { Footer } from "../Footer";
 import { Filters } from "./Filters";
-// import img1 from "./../../img/booksVec.png";
+import ClassroomNames from "./ClassNames";
+import { TailSpin } from "react-loader-spinner";
+import { makeStyles } from "@material-ui/core";
 
-const cardsDetails = [
-  {
-    heading: "Total Time",
-    weight: "180 mins",
-    borderColor: orange[500],
+const useStyles = makeStyles({
+  vertiHoriCenter: {
+    display: "flex",
+    // height: "90vh",
+    // backgroundColor: "purple",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  {
-    heading: "Students Enrolled",
-    weight: "93",
-    borderColor: blue[500],
+  cards: {
+    backgroundColor: "white",
+    // minHeight: "40px",
+    padding: "15px",
+    boxShadow: "1px 3px 10px rgb(0 0 0 / 0.2)",
+    borderRadius: "3px",
+    // margin: "5px",
   },
-  {
-    heading: "Avg. Attendance",
-    weight: "83/117",
-    borderColor: amber[500],
-  },
-  {
-    heading: "CP Score",
-    weight: "73/100",
-    borderColor: green[500],
-  },
-];
+});
 
 const Analytics = () => {
-
+  const classes = useStyles();
   const { courseId } = useParams();
-  //console.log(courseId);
-
   const [isLoading, setIsLoading] = useState(true);
   const { user, setUser } = useContext(userContext);
   const [resp, setResp] = useState([]);
@@ -67,7 +62,7 @@ const Analytics = () => {
     getItems();
   }, []);
 
-  console.log(resp.StudentsData);
+  console.log(resp);
 
   return (
     <React.Fragment>
@@ -82,35 +77,90 @@ const Analytics = () => {
             position: "relative",
           }}
         >
-          <Grid container>
+          <Grid container spacing={2}>
             <Grid item lg={8} md={8} sm={12} xm={12}>
-              <Typography
-                variant="h4"
-                color="white"
-                style={{
-                  bottom: "7px",
-                  left: "15px",
-                  position: "absolute",
-                  fontWeight: "bold",
-                }}
-              >
-                EEL4040: Computer Engineering
-              </Typography>
+              {!isLoading ? (
+                <Typography
+                  variant="h4"
+                  color="white"
+                  style={{
+                    bottom: "7px",
+                    left: "15px",
+                    position: "absolute",
+                    fontWeight: "bold",
+                  }}
+                >
+                  EEL4040: {resp.name}
+                </Typography>
+              ) : (
+                <Typography
+                  variant="h6"
+                  color="white"
+                  style={{
+                    bottom: "0px",
+                    left: "15px",
+                    position: "absolute",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <TailSpin heigth="35" width="35" color="white" />
+                </Typography>
+              )}
             </Grid>
-            <Grid item lg={8} md={8} sm={12} xm={12}>
-              {/* <img width="100%" src={img1} alt="" /> */}
-            </Grid>
+            <Grid item lg={8} md={8} sm={12} xm={12}></Grid>
           </Grid>
         </Box>
         <FileUploader />
-        {/* <DragDrop /> */}
-        <Grid style={{marginTop: "40px",}} container spacing={2}>
-          {cardsDetails.map((data, index) => (
-            <Grid key={index} item lg={3} md={6} sm={12} xs={12}>
-              <DetailCards props={data} />
-            </Grid>
-          ))}
+        <Grid style={{ marginTop: "40px", marginBottom: "40px"}} container spacing={2}>
+          <Grid item lg={3} md={6} sm={12}>
+            <Box
+              style={{ borderLeft: `3px solid ${orange[500]}` }}
+              className={classes.cards}
+            >
+              {!isLoading ? (
+                <DetailCards name={"Total Time"} data={resp.totalDuration} />
+              ) : (
+                <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+              )}
+            </Box>
+          </Grid>
+          <Grid item lg={3} md={6}>
+            <Box
+              style={{ borderLeft: `3px solid ${blue[500]}` }}
+              className={classes.cards}
+            >
+              {!isLoading ? (
+                <DetailCards
+                  name={"Students Enrolled"}
+                  data={resp.StudentsData.length}
+                />
+              ) : (
+                <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+              )}
+            </Box>
+          </Grid>
+          <Grid item lg={3} md={6}>
+            <Box
+              style={{ borderLeft: `3px solid ${amber[500]}` }}
+              className={classes.cards}
+            >
+              {!isLoading ? (
+                <DetailCards name={"Total Classes"} data={resp.totalClasses} />
+              ) : (
+                <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+              )}
+            </Box>
+          </Grid>
         </Grid>
+
+        {/* .................................................................................................... */}
+
+        <Typography variant="h5" color="textSecondary">
+          Classroom Names
+        </Typography>
+
+          <ClassroomNames data={resp} loading={isLoading} />
+
         <Filters />
         <Typography
           variant="h5"
@@ -122,7 +172,7 @@ const Analytics = () => {
         {!isLoading ? (
           <StudentsTable props={resp.StudentsData} />
         ) : (
-          <Typography>Loading Data...</Typography>
+          <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
         )}
       </Container>
       <Footer />
