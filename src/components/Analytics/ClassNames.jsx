@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
@@ -39,6 +40,17 @@ const ClassroomNames = ({ data, loading }) => {
     }
 
     //   Call the deleting route here.
+    const filename = {
+      name: nameToDelete,
+      classname: data.name,
+      //"mathematics121"
+    } 
+    console.log(filename);
+    axios.post(`http://localhost:3000/api/fileNames/deleteFileName` , {filename}).then((e) =>{
+      console.log("Ok Deleted");
+    }).catch((e)=>{
+      console.log("error" , e)
+    })
 
     setNameData((name) => name.filter((name) => name !== nameToDelete));
   };
@@ -50,6 +62,17 @@ const ClassroomNames = ({ data, loading }) => {
     }
 
     // Call the name adding route here.
+    const filename = {
+      name: name,
+      classname: data.name,
+      //"mathematics121"
+    } 
+    console.log(filename);
+    axios.post(`http://localhost:3000/api/fileNames/addFileName` , {filename}).then((e) =>{
+      console.log("Ok Added");
+    }).catch((e)=>{
+      console.log("error" , e)
+    })
 
     nameData.push(name);
     setNameData(nameData);
