@@ -33,7 +33,10 @@ const ClassroomNames = ({ data, loading }) => {
   const [name, setName] = React.useState("");
   const [nameError, setNameError] = React.useState(false);
 
-  const handleDelete = (nameToDelete) => () => {
+  //const [filena , setFilena] = React.useState(false);
+
+  const handleDelete =  (nameToDelete) =>  async() => {
+    try{
     if (nameData.length <= 1) {
       alert("You cannot delete the last name");
       return;
@@ -46,17 +49,30 @@ const ClassroomNames = ({ data, loading }) => {
       //"mathematics121"
     } 
     console.log(filename);
-    axios.post(`http://localhost:3000/api/fileNames/deleteFileName` , {filename}).then((e) =>{
-      console.log("Ok Deleted");
-    }).catch((e)=>{
-      console.log("error" , e)
-    })
+    const res = await axios.post(`http://localhost:3000/api/fileNames/deleteFileName` , {filename});
+    if(res.data.status === 400){
+        alert(res.data.msg);
+        // return;
+      }else if(res.data.status ===200){
+        console.log("Lets delete it");
+        setNameData((name) => name.filter((name) => name !== nameToDelete));
+        //setNameData([...nameData,name]);
+    }
+    // .then((e) =>{
+    //   setNameData((name) => name.filter((name) => name !== nameToDelete));
+    //   console.log("Ok Deleted");
+    // }).catch((e)=>{
+    //   console.log("error" , e)
+    // })
 
-    setNameData((name) => name.filter((name) => name !== nameToDelete));
+    //setNameData((name) => name.filter((name) => name !== nameToDelete));
+    }catch(err){
+      console.log(err);
+    }
   };
 
-  const handleClick = () => {
-    if (name == "") {
+  const handleClick = async () => {
+    if (name === "") {
       setNameError(true);
       return;
     }
@@ -68,14 +84,38 @@ const ClassroomNames = ({ data, loading }) => {
       //"mathematics121"
     } 
     console.log(filename);
-    axios.post(`http://localhost:3000/api/fileNames/addFileName` , {filename}).then((e) =>{
-      console.log("Ok Added");
-    }).catch((e)=>{
-      console.log("error" , e)
-    })
+    try{
+      //nameData.push(name);
+      
+      const res = await axios.post(`http://localhost:3000/api/fileNames/addFileName` , {filename});
+      console.log(res);
+      // if(res){
+      //  setNameData([...nameData,name]);
+      // }
+      if(res.data.status === 400){
+        alert(res.data.msg);
+        // return;
+      }else if(res.data.status ===200){
+        setNameData([...nameData,name]);
+      }
+    }catch(e){
+      console.log(e);
+    }
+    // axios.post(`http://localhost:3000/api/fileNames/addFileName` , {filename}).then((e) =>{
+    //   //nameData.push(name);
+    //   // setNameData(nameData);
+    //   // console.log(e);
+    //   console.log("Ok Added");
+    // }).catch((e)=>{
+    //   console.log("error" , e)
+    // })
 
-    nameData.push(name);
-    setNameData(nameData);
+    // if(filena){
+    //   nameData.push(name);
+    // setNameData(nameData);
+    // }
+    // nameData.push(name);
+    // setNameData(nameData);
     setName("");
     setNameError(false);
   };
