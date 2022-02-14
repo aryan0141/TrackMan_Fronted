@@ -35,7 +35,7 @@ function Row({ data }) {
         <TableCell align="center">{data.classesAttended}</TableCell>
         <TableCell align="center">{data.duration}</TableCell>
         <TableCell align="center">
-          {data.duration + data.classesAttended}
+          {data.comments}
         </TableCell>
         <TableCell align="center">{98}</TableCell>
       </TableRow>
