@@ -14,9 +14,16 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-function Row({ data }) {
+function Row({ data, classroomDetails }) {
   const [open, setOpen] = React.useState(false);
 
+  const normalizedAttendance = data.classesAttended/classroomDetails.totalClasses;
+  const normalizedTime = data.duration/classroomDetails.totalDuration;
+  const normalizedChats = data.comments/20;
+  const overallScore = normalizedAttendance*20 + normalizedTime*30 + normalizedChats*50;
+
+  const minsWathched = data.duration > 180 ? `${parseInt((data.duration)/60)}hrs ${parseInt((data.duration)%60)}mins` : `${parseInt((data.duration))}mins`;
+  
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -33,11 +40,11 @@ function Row({ data }) {
           {data.name}
         </TableCell>
         <TableCell align="center">{data.classesAttended}</TableCell>
-        <TableCell align="center">{data.duration}</TableCell>
+        <TableCell align="center">{minsWathched}</TableCell>
         <TableCell align="center">
           {data.comments}
         </TableCell>
-        <TableCell align="center">{98}</TableCell>
+        <TableCell align="center">{overallScore}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -53,6 +60,7 @@ function Row({ data }) {
 }
 
 export default function CollapsibleTable({ props }) {
+  const data = props.StudentsData;
   return (
     <TableContainer component={Paper} style={{ border: "1px solid #a9a9a9", borderBottom: 0, margin: "2px auto 40px auto"}}>
       <Table aria-label="collapsible table">
@@ -67,8 +75,8 @@ export default function CollapsibleTable({ props }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.map((data, index) => (
-            <Row key={index} data={data} />
+          {data.map((data, index) => (
+            <Row key={index} data={data} classroomDetails={props} />
           ))}
         </TableBody>
       </Table>

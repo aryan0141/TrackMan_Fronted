@@ -12,18 +12,6 @@ const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-// const nameData = [
-//   "React",
-//   "Angular",
-//   "jQuery",
-//   "Polymer",
-//   "Vue.js",
-//   "Vue.js",
-//   "Vue.js",
-//   "Vue.js",
-//   "Vue.js",
-// ];
-
 const ClassroomNames = ({ data, loading }) => {
   const [nameData, setNameData] = React.useState(null);
   React.useEffect(() => {
@@ -32,6 +20,15 @@ const ClassroomNames = ({ data, loading }) => {
 
   const [name, setName] = React.useState("");
   const [nameError, setNameError] = React.useState(false);
+  const [time, setTime] = React.useState("");
+  const [timeError, setTimeError] = React.useState(false);
+  const [finalTime , setFinalTime] = React.useState("");
+
+  React.useEffect(() => {
+    setFinalTime(data.cutOffMins);
+  }, [loading]);
+
+  
 
   //const [filena , setFilena] = React.useState(false);
 
@@ -70,6 +67,35 @@ const ClassroomNames = ({ data, loading }) => {
       console.log(err);
     }
   };
+
+  const handleCuttOffTimeClick = async () => {
+    if (time === "") {
+      setTimeError(true);
+      return;
+    }
+
+    const cuttOffMin1 = {
+      cuttOffMin: time,
+      className1: data.name, 
+    }
+
+    try{
+      console.log(cuttOffMin1);
+      const res = await axios.post(`http://localhost:3000/api/fileNames/updateCuttOffMin`, { cuttOffMin1 });
+      if(res.data.status === 400){
+        alert(res.data.msg);
+        // return;
+      }else if(res.data.status ===200){
+        //console.log("Success 123");
+        setFinalTime(time);
+        // setNameData([...nameData,name]);
+      }
+    }catch(e){
+      console.log(e);
+    }
+    setTime("");
+    setTimeError(false);
+  }
 
   const handleClick = async () => {
     if (name === "") {
@@ -192,6 +218,49 @@ const ClassroomNames = ({ data, loading }) => {
             <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
           )}
         </Paper>
+        <Box
+        sx={{
+          margin: "30px 0px 8px 0px",
+        }}>
+          
+        <Box
+          sx={{
+            display: "flex",
+            margin: "10px 0px",
+          }}
+        >
+          <TextField
+            id="outlined-basic"
+            label="Enter Cutt-Off Time in (mins)"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            error={timeError}
+            variant="outlined"
+            size="small"
+          />
+          <Button
+            size="large"
+            sx={{
+              margin: "auto 10px",
+              padding: "4px 15px",
+            }}
+            variant="contained"
+            color="primary"
+            onClick={handleCuttOffTimeClick}
+          >
+            Submit
+          </Button>
+            
+        </Box>
+        {!loading ? (
+          <Chip
+            color="primary"
+            label={`${finalTime} mins`}
+          />
+        ) : (
+          <TailSpin heigth="21" width="21" color="rgb(33, 150, 243)" />
+        )}
+        </Box>
       </Box>
     </React.Fragment>
   );

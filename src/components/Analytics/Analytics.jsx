@@ -90,7 +90,7 @@ const Analytics = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  EEL4040: {resp.name}
+                  {resp.name}
                 </Typography>
               ) : (
                 <Typography
@@ -118,7 +118,7 @@ const Analytics = () => {
               className={classes.cards}
             >
               {!isLoading ? (
-                <DetailCards name={"Total Time"} data={resp.totalDuration} />
+                <DetailCards name={"Total Time"} data={resp.totalDuration > 180 ? `${parseInt((resp.totalDuration)/60)}hrs ${parseInt((resp.totalDuration)%60)}mins` : `${parseInt((resp.totalDuration))}mins`}  />
               ) : (
                 <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
               )}
@@ -156,7 +156,7 @@ const Analytics = () => {
         {/* .................................................................................................... */}
 
         <Typography variant="h5" color="textSecondary">
-          Classroom Names
+          Settings
         </Typography>
 
           <ClassroomNames data={resp} loading={isLoading} />
@@ -170,7 +170,7 @@ const Analytics = () => {
           Students Data
         </Typography>
         {!isLoading ? (
-          <StudentsTable props={resp.StudentsData} />
+          <StudentsTable props={resp} />
         ) : (
           <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
         )}
