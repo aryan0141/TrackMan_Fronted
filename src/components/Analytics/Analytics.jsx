@@ -41,6 +41,7 @@ const Analytics = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { user, setUser } = useContext(userContext);
   const [resp, setResp] = useState([]);
+  const [studentsData, setStudentsData] = useState([]);
 
   useEffect(() => {
     const getItems = async () => {
@@ -53,6 +54,7 @@ const Analytics = () => {
         );
         //136844541806
         setResp(response.data);
+        setStudentsData(response.data.StudentsData);
         setIsLoading(false);
       } catch (e) {
         console.log("error occured  ", e);
@@ -62,7 +64,6 @@ const Analytics = () => {
     getItems();
   }, []);
 
-  console.log(resp);
 
   return (
     <React.Fragment>
@@ -110,7 +111,7 @@ const Analytics = () => {
             <Grid item lg={8} md={8} sm={12} xm={12}></Grid>
           </Grid>
         </Box>
-        <FileUploader />
+        <FileUploader courseId={courseId}/>
         <Grid style={{ marginTop: "40px", marginBottom: "40px"}} container spacing={2}>
           <Grid item lg={3} md={6} sm={12}>
             <Box
@@ -156,12 +157,17 @@ const Analytics = () => {
         {/* .................................................................................................... */}
 
         <Typography variant="h5" color="textSecondary">
-          Settings
+          Classroom Settings
         </Typography>
 
           <ClassroomNames data={resp} loading={isLoading} />
 
-        <Filters />
+        {/* Filters */}
+        {!isLoading ? (
+          <Filters data={resp.StudentsData} onChange = {(data) => setStudentsData(data)} />
+        ) : (
+          <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+        )}
         <Typography
           variant="h5"
           color="textSecondary"

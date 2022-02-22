@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { Button, Container, Input, Typography } from "@mui/material";
@@ -8,7 +9,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import LinearProgress from "@mui/material/LinearProgress";
 // import {ProgressBar} from 'react-bootstrap';
 
-const FileUploader = ({}) => {
+const FileUploader = ({courseId}) => {
   const [file, setFile] = useState(null);
   const [uploadBtnDisabled,setUploadBtnDisabled] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
@@ -17,6 +18,8 @@ const FileUploader = ({}) => {
     setFile(e.target.files[0]);
   };
 
+  const history = useHistory();
+  
   const onSubmit = (e) => {
 
     if(file == null) {
@@ -63,6 +66,10 @@ const FileUploader = ({}) => {
 
       axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
           console.log("Ok printed");
+          
+            
+            history.push(`/analytics/${courseId}`);
+  
       }).catch((e)=>{
           console.log("error" , e)
       })
