@@ -16,10 +16,14 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 function Row({ data, classroomDetails }) {
   const [open, setOpen] = React.useState(false);
+  const totalChats = 0;
+  for(var i=0; i<data.length; i++) {
+    totalChats+=data[i].comments;
+  }
 
-  const normalizedAttendance = data.classesAttended/classroomDetails.totalClasses;
-  const normalizedTime = data.duration/classroomDetails.totalDuration;
-  const normalizedChats = data.comments/20;
+  const normalizedAttendance = (classroomDetails.totalClasses) ? data.classesAttended/classroomDetails.totalClasses : 0;
+  const normalizedTime =  (classroomDetails.totalDuration) ? data.duration/classroomDetails.totalDuration : 0;
+  const normalizedChats = (totalChats) ? data.comments/totalChats : 0;
   const overallScore = normalizedAttendance*20 + normalizedTime*30 + normalizedChats*50;
 
   const minsWathched = data.duration > 180 ? `${parseInt((data.duration)/60)}hrs ${parseInt((data.duration)%60)}mins` : `${parseInt((data.duration))}mins`;
@@ -59,8 +63,9 @@ function Row({ data, classroomDetails }) {
   );
 }
 
-export default function CollapsibleTable({ props }) {
-  const data = props.StudentsData;
+export default function CollapsibleTable({ props, studentsData }) {
+  // const data = studentsData;
+  // console.log("Welcome", studentsData);
   return (
     <TableContainer component={Paper} style={{ border: "1px solid #a9a9a9", borderBottom: 0, margin: "2px auto 40px auto"}}>
       <Table aria-label="collapsible table">
@@ -75,7 +80,7 @@ export default function CollapsibleTable({ props }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((data, index) => (
+          {studentsData.map((data, index) => (
             <Row key={index} data={data} classroomDetails={props} />
           ))}
         </TableBody>

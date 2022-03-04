@@ -64,15 +64,18 @@ const FileUploader = ({courseId}) => {
       console.log(fileName);
       // var fileName = req.files.upload.name;
 
-      axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
-          console.log("Ok printed");
-          
-            
-            history.push(`/analytics/${courseId}`);
+      // axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
+      //     console.log("Ok printed");
+      //     history.push(`/analytics/${courseId}`);
   
-      }).catch((e)=>{
-          console.log("error" , e)
-      })
+      // }).catch((e)=>{
+      //     console.log("error" , e)
+      // })
+
+      const res12 = axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName});
+      if(res12){
+        history.go(0);
+      }
       console.log("Success");
 
 

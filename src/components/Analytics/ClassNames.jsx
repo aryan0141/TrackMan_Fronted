@@ -1,5 +1,6 @@
 import * as React from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
@@ -13,6 +14,10 @@ const ListItem = styled("li")(({ theme }) => ({
 }));
 
 const ClassroomNames = ({ data, loading }) => {
+  var a1 = ``;
+  a1 = data.uploadTime + data.FileType;
+  const history = useHistory();
+
   const [nameData, setNameData] = React.useState(null);
   React.useEffect(() => {
     setNameData(data.fileNames);
@@ -22,48 +27,67 @@ const ClassroomNames = ({ data, loading }) => {
   const [nameError, setNameError] = React.useState(false);
   const [time, setTime] = React.useState("");
   const [timeError, setTimeError] = React.useState(false);
-  const [finalTime , setFinalTime] = React.useState("");
+  const [finalTime, setFinalTime] = React.useState("");
+  
+  const [filesData, setFilesData] = React.useState(null);
 
   React.useEffect(() => {
     setFinalTime(data.cutOffMins);
+    setFilesData(data.uploadNames);
+    console.log(data);
   }, [loading]);
 
-  
+
+  const handleFilesDelete = (fileData) => async () => {
+    //alert(data._id);
+    if(fileData.FileType ==='csv'){
+    const res = await axios.get(`http://localhost:3000/api/uploadDoc/deleteEveryClass/${data.courseId}/${fileData.fileId}`);
+    
+    if (res.data.status === 200) {
+      history.go(0);
+    }
+    }else if(fileData.FileType ==='sbv'){
+    const res = await axios.get(`http://localhost:3000/api/uploadDoc/deleteEveryClassSbv/${data.courseId}/${fileData.fileId}`);
+    
+    if (res.data.status === 200) {
+      history.go(0);
+    }
+    }
+  }
+
+
 
   //const [filena , setFilena] = React.useState(false);
 
-  const handleDelete =  (nameToDelete) =>  async() => {
-    try{
-    if (nameData.length <= 1) {
-      alert("You cannot delete the last name");
-      return;
-    }
+  const handleDelete = (nameToDelete) => async () => {
+    try {
+      if (nameData.length <= 1) {
+        alert("You cannot delete the last name");
+        return;
+      }
 
-    //   Call the deleting route here.
-    const filename = {
-      name: nameToDelete,
-      classname: data.name,
-      //"mathematics121"
-    } 
-    console.log(filename);
-    const res = await axios.post(`http://localhost:3000/api/fileNames/deleteFileName` , {filename});
-    if(res.data.status === 400){
+      //   Call the deleting route here.
+      const filename = {
+        name: nameToDelete,
+        classname: data.name,
+        //"mathematics121"
+      };
+      console.log(filename);
+      const res = await axios.post(
+        `http://localhost:3000/api/fileNames/deleteFileName`,
+        { filename }
+      );
+      if (res.data.status === 400) {
         alert(res.data.msg);
         // return;
-      }else if(res.data.status ===200){
+      } else if (res.data.status === 200) {
         console.log("Lets delete it");
         setNameData((name) => name.filter((name) => name !== nameToDelete));
         //setNameData([...nameData,name]);
-    }
-    // .then((e) =>{
-    //   setNameData((name) => name.filter((name) => name !== nameToDelete));
-    //   console.log("Ok Deleted");
-    // }).catch((e)=>{
-    //   console.log("error" , e)
-    // })
+      }
 
-    //setNameData((name) => name.filter((name) => name !== nameToDelete));
-    }catch(err){
+      //setNameData((name) => name.filter((name) => name !== nameToDelete));
+    } catch (err) {
       console.log(err);
     }
   };
@@ -76,26 +100,29 @@ const ClassroomNames = ({ data, loading }) => {
 
     const cuttOffMin1 = {
       cuttOffMin: time,
-      className1: data.name, 
-    }
+      className1: data.name,
+    };
 
-    try{
+    try {
       console.log(cuttOffMin1);
-      const res = await axios.post(`http://localhost:3000/api/fileNames/updateCuttOffMin`, { cuttOffMin1 });
-      if(res.data.status === 400){
+      const res = await axios.post(
+        `http://localhost:3000/api/fileNames/updateCuttOffMin`,
+        { cuttOffMin1 }
+      );
+      if (res.data.status === 400) {
         alert(res.data.msg);
         // return;
-      }else if(res.data.status ===200){
+      } else if (res.data.status === 200) {
         //console.log("Success 123");
         setFinalTime(time);
         // setNameData([...nameData,name]);
       }
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
     setTime("");
     setTimeError(false);
-  }
+  };
 
   const handleClick = async () => {
     if (name === "") {
@@ -108,45 +135,30 @@ const ClassroomNames = ({ data, loading }) => {
       name: name,
       classname: data.name,
       //"mathematics121"
-    } 
+    };
     console.log(filename);
-    try{
+    try {
       //nameData.push(name);
-      
-      const res = await axios.post(`http://localhost:3000/api/fileNames/addFileName` , {filename});
+
+      const res = await axios.post(
+        `http://localhost:3000/api/fileNames/addFileName`,
+        { filename }
+      );
       console.log(res);
-      // if(res){
-      //  setNameData([...nameData,name]);
-      // }
-      if(res.data.status === 400){
+      if (res.data.status === 400) {
         alert(res.data.msg);
-        // return;
-      }else if(res.data.status ===200){
-        setNameData([...nameData,name]);
+      } else if (res.data.status === 200) {
+        setNameData([...nameData, name]);
       }
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
-    // axios.post(`http://localhost:3000/api/fileNames/addFileName` , {filename}).then((e) =>{
-    //   //nameData.push(name);
-    //   // setNameData(nameData);
-    //   // console.log(e);
-    //   console.log("Ok Added");
-    // }).catch((e)=>{
-    //   console.log("error" , e)
-    // })
-
-    // if(filena){
-    //   nameData.push(name);
-    // setNameData(nameData);
-    // }
-    // nameData.push(name);
-    // setNameData(nameData);
     setName("");
     setNameError(false);
   };
 
   return (
+    
     <React.Fragment>
       <Box
         style={{
@@ -156,6 +168,7 @@ const ClassroomNames = ({ data, loading }) => {
           borderRadius: "4px",
         }}
       >
+        <Typography variant="h6">Classroom Names</Typography>
         <Box
           sx={{
             display: "flex",
@@ -219,47 +232,83 @@ const ClassroomNames = ({ data, loading }) => {
           )}
         </Paper>
         <Box
-        sx={{
-          margin: "30px 0px 8px 0px",
-        }}>
-          
-        <Box
           sx={{
-            display: "flex",
-            margin: "10px 0px",
+            margin: "30px 0px 8px 0px",
           }}
         >
-          <TextField
-            id="outlined-basic"
-            label="Enter Cutt-Off Time in (mins)"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            error={timeError}
-            variant="outlined"
-            size="small"
-          />
-          <Button
-            size="large"
+
+          <Typography variant="h6">Class Time</Typography>
+          <Box
             sx={{
-              margin: "auto 10px",
-              padding: "4px 15px",
+              display: "flex",
+              margin: "10px 0px",
             }}
-            variant="contained"
-            color="primary"
-            onClick={handleCuttOffTimeClick}
           >
-            Submit
-          </Button>
-            
+            <TextField
+              id="outlined-basic"
+              label="Enter in (mins)"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              error={timeError}
+              variant="outlined"
+              size="small"
+            />
+            <Button
+              size="large"
+              sx={{
+                margin: "auto 10px",
+                padding: "4px 15px",
+              }}
+              variant="contained"
+              color="primary"
+              onClick={handleCuttOffTimeClick}
+            >
+              Submit
+            </Button>
+          </Box>
+          {!loading ? (
+            <Chip color="primary" label={`${finalTime} mins`} />
+          ) : (
+            <TailSpin heigth="21" width="21" color="rgb(33, 150, 243)" />
+          )}
         </Box>
-        {!loading ? (
-          <Chip
-            color="primary"
-            label={`${finalTime} mins`}
-          />
-        ) : (
-          <TailSpin heigth="21" width="21" color="rgb(33, 150, 243)" />
-        )}
+
+        {/* Names of uploaded files */}
+        <Box
+          sx={{
+            margin: "20px 0px",
+          }}
+        >
+          <Typography variant="h6">Files Uploaded</Typography>
+          <Paper
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              listStyle: "none",
+              p: 0.5,
+              m: 0,
+            }}
+            component="ul"
+          >
+            {!loading && filesData ? (
+              // !filesData ? (<Typography variant="text" color="textSecondary">No files uploaded yet!</Typography>) :
+              filesData.map((data, index) => {
+                const a1 = data.uploadTime + " __" + data.FileType;
+                return (
+                  <ListItem key={index}>
+                    <Chip
+                      color="primary"
+                      label={a1}
+                      // label={data.fileId}
+                      onDelete={handleFilesDelete(data)}
+                    />
+                  </ListItem>
+                );
+              })
+            ) : (
+              <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+            )}
+          </Paper>
         </Box>
       </Box>
     </React.Fragment>

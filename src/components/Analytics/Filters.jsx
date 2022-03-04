@@ -124,11 +124,38 @@ import {
 
 export const Filters = (props) => {
   const [age, setAge] = React.useState("");
-  const [search, setSearch] = React.useState("");
+  // const [search, setSearch] = React.useState("");
   const handleChange = (event) => {
-    setAge(event.target.value);
+    const value = event.target.value;
+    setAge(value);
+    // if(value === "attendance") {
+    //   const sortedData = props.data.sort((a, b) => (a.classesAttended < b.classesAttended) ? 1 : (a.classesAttended === b.classesAttended) ? ((a.size > b.size) ? 1 : -1) : -1 );
+    //   props.onChange(sortedData);
+    // } else if(value === "mins_watched") {
+    //   const sortedData = props.data.sort((a, b) => (a.duration < b.duration) ? 1 : (a.duration === b.duration) ? ((a.size > b.size) ? 1 : -1) : -1 );
+    //   console.log("SortedData", sortedData);
+    //   props.onChange(sortedData);
+    // } else if(value === "comments") {
+    //   const sortedData = props.data.sort((a, b) => (a.comments < b.comments) ? 1 : (a.comments === b.comments) ? ((a.size > b.size) ? 1 : -1) : -1 );
+    //   props.onChange(sortedData);
+    // }
   };
-  // console.log("Helloji", props);
+
+  function sortData(value) {
+    if(value === "attendance") {
+      const sortedData = props.data.sort((a, b) => (a.classesAttended < b.classesAttended) ? 1 : (a.classesAttended === b.classesAttended) ? ((a.size > b.size) ? 1 : -1) : -1 );
+      props.onChange(sortedData);
+    } else if(value === "mins_watched") {
+      console.log("Andar aaya hun!");
+      const sortedData = props.data.sort((a, b) => (a.duration < b.duration) ? 1 : (a.duration === b.duration) ? ((a.size > b.size) ? 1 : -1) : -1 );
+      console.log("SortedData", sortedData);
+      props.onChange(sortedData);
+    } else if(value === "comments") {
+      const sortedData = props.data.sort((a, b) => (a.comments < b.comments) ? 1 : (a.comments === b.comments) ? ((a.size > b.size) ? 1 : -1) : -1 );
+      props.onChange(sortedData);
+    }
+  }
+
   function cropData(value) {
     if(props.data.length >= parseInt(value)) {
       props.onChange(props.data.slice(0, parseInt(value)));
@@ -136,13 +163,6 @@ export const Filters = (props) => {
       props.onChange(props.data);
     }
     // console.log(data);   
-  }
-
-  function sortData(value) {
-    console.log(value);
-    if(value == "")
-    props.data.sort((a, b) => (a.color > b.color) ? 1 : (a.color === b.color) ? ((a.size > b.size) ? 1 : -1) : -1 )
-    props.onChange(props.data);
   }
 
   // function searchData(value) {
@@ -183,9 +203,9 @@ export const Filters = (props) => {
           // defaultValue="All"
         >
           <FormControlLabel
-            value="10"
+            value="1"
             control={<Radio />}
-            label="10"
+            label="1"
             labelPlacement="start"
             onChange={(e) => cropData(e.target.value)}
           />
@@ -229,10 +249,10 @@ export const Filters = (props) => {
                 <em>None</em>
               </MenuItem>
               {/* <MenuItem value={22}>Roll No.</MenuItem> */}
-              <MenuItem value={"attendance"}>Attendance</MenuItem>
-              <MenuItem value={21}>Time Watched</MenuItem>
-              <MenuItem value={23}>Chats Score</MenuItem>
-              <MenuItem value={24}>Overall Score</MenuItem>
+              <MenuItem value={"attendance"} onClick={(e) => sortData(e.target.value)}>Attendance</MenuItem>
+              <MenuItem value={"mins_watched"} onClick={(e) => sortData(e.target.value)}>Time Watched</MenuItem>
+              <MenuItem value={"comments"} onClick={(e) => sortData(e.target.value)}>Chat Score</MenuItem>
+              {/* <MenuItem value={24}>Overall Score</MenuItem> */}
             </Select>
           </FormControl>
           <br />

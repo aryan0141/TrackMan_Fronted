@@ -163,11 +163,11 @@ const Analytics = () => {
           <ClassroomNames data={resp} loading={isLoading} />
 
         {/* Filters */}
-        {!isLoading ? (
+        {/* {!isLoading ? (
           <Filters data={resp.StudentsData} onChange = {(data) => setStudentsData(data)} />
         ) : (
           <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
-        )}
+        )} */}
         <Typography
           variant="h5"
           color="textSecondary"
@@ -176,7 +176,7 @@ const Analytics = () => {
           Students Data
         </Typography>
         {!isLoading ? (
-          <StudentsTable props={resp} />
+          <StudentsTable props={resp} studentsData={studentsData} />
         ) : (
           <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
         )}
