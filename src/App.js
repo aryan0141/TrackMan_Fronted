@@ -14,6 +14,7 @@ import React, { useState , useEffect } from "react";
 import Home from "./components/HomePage/home";
 import TeachersPage from "./components/TeachersPage/TeachersPage";
 import Analytics from './components/Analytics/Analytics';
+import Contact from "./components/Contact.jsx";
 import { userContext } from "./userContext";
 import { blue, red } from "@mui/material/colors";
 // import { createTheme } from "@mui/material";
@@ -70,16 +71,18 @@ function App() {
             <Route exact path="/">
               <Home />
             </Route>
-            { user && user.email && <Route path="/teachersPage">
-              <TeachersPage />
-            </Route>
-            }
-            { user && user.email && <Route path="/analytics/:courseId">
-              <Analytics/>
-            </Route>
-            }
+            {user && user.email && (
+              <Route path="/teachersPage">
+                <TeachersPage />
+              </Route>
+            )}
+            {user && user.email && (
+              <Route path="/analytics/:courseId">
+                <Analytics />
+              </Route>
+            )}
+            <Route path="/contacts"><Contact/></Route>
           </userContext.Provider>
-
 
           {/* 
         </Route>
