@@ -9,9 +9,9 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import LinearProgress from "@mui/material/LinearProgress";
 // import {ProgressBar} from 'react-bootstrap';
 
-const FileUploader = ({courseId}) => {
+const FileUploader = ({ courseId }) => {
   const [file, setFile] = useState(null);
-  const [uploadBtnDisabled,setUploadBtnDisabled] = useState(false);
+  const [uploadBtnDisabled, setUploadBtnDisabled] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
 
   const onInputChange = (e) => {
@@ -19,20 +19,18 @@ const FileUploader = ({courseId}) => {
   };
 
   const history = useHistory();
-  
-  const onSubmit = (e) => {
 
-    if(file == null) {
+  const onSubmit = (e) => {
+    if (file == null) {
       alert("Select a file first");
       return;
     }
 
     const fileName1 = file.name;
-    var arr = fileName1.split('.');
-    var extension = arr[arr.length-1];
+    var arr = fileName1.split(".");
+    var extension = arr[arr.length - 1];
     //console.log(extension);
-    if(extension !=='csv' && extension!=='sbv')
-    {
+    if (extension !== "csv" && extension !== "sbv") {
       alert("Select a Valid .csv or .sbv type File");
       return;
     }
@@ -55,11 +53,11 @@ const FileUploader = ({courseId}) => {
       },
     };
 
-    axios.post("http://localhost:3000/api/uploadDoc/upload", data, options).then((res) => {
-      console.log(res);
+    axios.post("/api/uploadDoc/upload", data, options).then((res) => {
+      console.log(res, "INSIDE");
 
       //console.log(res.data.originalname);
-      
+
       const fileName = String(res.data.originalname);
       console.log(fileName);
       // var fileName = req.files.upload.name;
@@ -67,19 +65,16 @@ const FileUploader = ({courseId}) => {
       // axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
       //     console.log("Ok printed");
       //     history.push(`/analytics/${courseId}`);
-  
+
       // }).catch((e)=>{
       //     console.log("error" , e)
       // })
 
-      const res12 = axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName});
-      if(res12){
+      const res12 = axios.post(`/api/uploadDoc/addClass`, { fileName });
+      if (res12) {
         history.go(0);
       }
       console.log("Success");
-
-
-
 
       setUploadPercentage(100);
       setTimeout(() => {
@@ -123,14 +118,32 @@ const FileUploader = ({courseId}) => {
             </Typography>
           </div>
           {file && (
-            <Typography color="textSecondary" style={{fontSize: "0.9rem", marginBottom: "5px"}}><b>Selected:</b> {file.name}</Typography>
+            <Typography
+              color="textSecondary"
+              style={{ fontSize: "0.9rem", marginBottom: "5px" }}
+            >
+              <b>Selected:</b> {file.name}
+            </Typography>
           )}
-          <Button disabled={uploadBtnDisabled} variant="contained" style={{marginLeft: "50%", transform: "translateX(-50%)", marginTop: "5px"}} onClick={onSubmit}>
+          <Button
+            disabled={uploadBtnDisabled}
+            variant="contained"
+            style={{
+              marginLeft: "50%",
+              transform: "translateX(-50%)",
+              marginTop: "5px",
+            }}
+            onClick={onSubmit}
+          >
             Upload
           </Button>
           <br />
-          { uploadPercentage!==0 && <Typography>{uploadPercentage}%</Typography>}
-          { uploadPercentage!==0 && <LinearProgress variant="determinate" value={uploadPercentage} />}
+          {uploadPercentage !== 0 && (
+            <Typography>{uploadPercentage}%</Typography>
+          )}
+          {uploadPercentage !== 0 && (
+            <LinearProgress variant="determinate" value={uploadPercentage} />
+          )}
         </form>
       </Box>
     </Container>
