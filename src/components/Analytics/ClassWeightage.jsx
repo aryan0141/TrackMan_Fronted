@@ -2,15 +2,16 @@ import * as React from "react";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { TailSpin } from "react-loader-spinner";
+import axios from "axios";
 
 export const ClassWeightage = ({ classData, loader }) => {
-  const [time, setTime] = React.useState(classData.cutOffMins);
+  const [time, setTime] = React.useState(classData.weightAge[0]);
   const [timeError, setTimeError] = React.useState(false);
 
-  const [attendance, setAttendance] = React.useState(classData.cutOffMins);
+  const [attendance, setAttendance] = React.useState(classData.weightAge[1]);
   const [attendanceError, setAttendanceError] = React.useState(false);
 
-  const [comments, setComments] = React.useState(classData.cutOffMins);
+  const [comments, setComments] = React.useState(classData.weightAge[2]);
   const [commentsError, setCommentsError] = React.useState(false);
 
   // React.useEffect(() => {
@@ -39,6 +40,27 @@ export const ClassWeightage = ({ classData, loader }) => {
       setCommentsError(true);
       alert("Sum of all three must be equal to 100");
       return;
+    }
+
+    const weightAgeDoc = {
+      w1: time,
+      w2: attendance,
+      w3: comments,
+      className2: classData.name,
+    };
+
+    
+    const resp = await axios.post(`/api/fileNames/updateWeightageArr`, {
+      weightAgeDoc,
+    });
+    if (resp.data.status === 200) {
+      //alert("AAAA");
+      setTime(time);
+      setAttendance(attendance);
+      setComments(comments);
+      setTimeError(false);
+      setAttendanceError(false);
+      setCommentsError(false);
     }
   };
 
