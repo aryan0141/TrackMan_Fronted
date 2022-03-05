@@ -13,7 +13,7 @@ import { blue, green, orange, red } from "@mui/material/colors";
 import { amber } from "@material-ui/core/colors";
 import { Footer } from "../Footer";
 import { Filters } from "./Filters";
-import ClassroomNames from "./ClassNames";
+import ClassroomNames from "./ClassroomSettings";
 import { TailSpin } from "react-loader-spinner";
 import { makeStyles } from "@material-ui/core";
 
@@ -42,6 +42,8 @@ const Analytics = () => {
   const { user, setUser } = useContext(userContext);
   const [resp, setResp] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
+
+  
 
   useEffect(() => {
     const getItems = async () => {
@@ -176,7 +178,7 @@ const Analytics = () => {
           Students Data
         </Typography>
         {!isLoading ? (
-          <StudentsTable props={resp} studentsData={studentsData} />
+          <StudentsTable resp={resp} studentsData={studentsData} />
         ) : (
           <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
         )}
