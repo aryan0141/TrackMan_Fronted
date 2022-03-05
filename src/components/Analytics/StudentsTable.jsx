@@ -13,21 +13,33 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Filters } from "./Filters";
 
 function Row({ data, classroomDetails }) {
   const [open, setOpen] = React.useState(false);
   const totalChats = 0;
-  for(var i=0; i<data.length; i++) {
-    totalChats+=data[i].comments;
+  for (var i = 0; i < data.length; i++) {
+    totalChats += data[i].comments;
   }
 
-  const normalizedAttendance = (classroomDetails.totalClasses) ? data.classesAttended/classroomDetails.totalClasses : 0;
-  const normalizedTime =  (classroomDetails.totalDuration) ? data.duration/classroomDetails.totalDuration : 0;
-  const normalizedChats = (totalChats) ? data.comments/totalChats : 0;
-  const overallScore = normalizedAttendance*20 + normalizedTime*30 + normalizedChats*50;
+  const normalizedAttendance = classroomDetails.totalClasses
+    ? data.classesAttended / classroomDetails.totalClasses
+    : 0;
+  const normalizedTime = classroomDetails.totalDuration
+    ? data.duration / classroomDetails.totalDuration
+    : 0;
+  const normalizedChats = totalChats ? data.comments / totalChats : 0;
+  const overallScore = (
+    normalizedAttendance * 20 +
+    normalizedTime * 30 +
+    normalizedChats * 50
+  ).toFixed(2);
 
-  const minsWathched = data.duration > 180 ? `${parseInt((data.duration)/60)}hrs ${parseInt((data.duration)%60)}mins` : `${parseInt((data.duration))}mins`;
-  
+  const minsWathched =
+    data.duration > 180
+      ? `${parseInt(data.duration / 60)}hrs ${parseInt(data.duration % 60)}mins`
+      : `${parseInt(data.duration)}mins`;
+
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -45,9 +57,7 @@ function Row({ data, classroomDetails }) {
         </TableCell>
         <TableCell align="center">{data.classesAttended}</TableCell>
         <TableCell align="center">{minsWathched}</TableCell>
-        <TableCell align="center">
-          {data.comments}
-        </TableCell>
+        <TableCell align="center">{data.comments}</TableCell>
         <TableCell align="center">{overallScore}</TableCell>
       </TableRow>
       <TableRow>
@@ -63,28 +73,46 @@ function Row({ data, classroomDetails }) {
   );
 }
 
-export default function CollapsibleTable({ props, studentsData }) {
+export default function CollapsibleTable({ resp, studentsData }) {
   // const data = studentsData;
   // console.log("Welcome", studentsData);
+
+  const [data, setData] = React.useState(studentsData);
+  const [searchQuery, setSearchQuery] = React.useState("");
+
   return (
-    <TableContainer component={Paper} style={{ border: "1px solid #a9a9a9", borderBottom: 0, margin: "2px auto 40px auto"}}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Name</TableCell>
-            <TableCell align="center">Classes Attented</TableCell>
-            <TableCell align="center">Min Watched</TableCell>
-            <TableCell align="center">Chats Score</TableCell>
-            <TableCell align="center">Overall Score</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {studentsData.map((data, index) => (
-            <Row key={index} data={data} classroomDetails={props} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <React.Fragment>
+      <Filters
+        data={resp.StudentsData}
+        query={searchQuery}
+        onChange={(data, query) => {setData(data); setSearchQuery(query)}}
+      />
+      <TableContainer
+        component={Paper}
+        style={{
+          border: "1px solid #a9a9a9",
+          borderBottom: 0,
+          margin: "2px auto 40px auto",
+        }}
+      >
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>Name</TableCell>
+              <TableCell align="center">Classes Attented</TableCell>
+              <TableCell align="center">Min Watched</TableCell>
+              <TableCell align="center">Chats Score</TableCell>
+              <TableCell align="center">Overall Score</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.filter((data) => data.name.toLowerCase().includes(searchQuery)).map((data, index) => (
+              <Row key={index} data={data} classroomDetails={resp} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </React.Fragment>
   );
 }

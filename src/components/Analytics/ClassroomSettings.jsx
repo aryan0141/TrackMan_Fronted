@@ -8,6 +8,8 @@ import TagFacesIcon from "@mui/icons-material/TagFaces";
 import { Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { TailSpin } from "react-loader-spinner";
+import { ClassWeightage } from "./ClassWeightage";
+import { blue, green, orange, yellow } from "@mui/material/colors";
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -15,12 +17,13 @@ const ListItem = styled("li")(({ theme }) => ({
 
 const ClassroomNames = ({ data, loading }) => {
   var a1 = ``;
-  a1 = data.uploadTime + data.FileType;
+  
   const history = useHistory();
 
   const [nameData, setNameData] = React.useState(null);
   React.useEffect(() => {
     setNameData(data.fileNames);
+    a1 = data.uploadTime + data.FileType;
   }, [loading]);
 
   const [name, setName] = React.useState("");
@@ -28,34 +31,34 @@ const ClassroomNames = ({ data, loading }) => {
   const [time, setTime] = React.useState("");
   const [timeError, setTimeError] = React.useState(false);
   const [finalTime, setFinalTime] = React.useState("");
-  
+
   const [filesData, setFilesData] = React.useState(null);
 
   React.useEffect(() => {
     setFinalTime(data.cutOffMins);
     setFilesData(data.uploadNames);
-    console.log(data);
   }, [loading]);
-
 
   const handleFilesDelete = (fileData) => async () => {
     //alert(data._id);
-    if(fileData.FileType ==='csv'){
-    const res = await axios.get(`http://localhost:3000/api/uploadDoc/deleteEveryClass/${data.courseId}/${fileData.fileId}`);
-    
-    if (res.data.status === 200) {
-      history.go(0);
-    }
-    }else if(fileData.FileType ==='sbv'){
-    const res = await axios.get(`http://localhost:3000/api/uploadDoc/deleteEveryClassSbv/${data.courseId}/${fileData.fileId}`);
-    
-    if (res.data.status === 200) {
-      history.go(0);
-    }
-    }
-  }
+    if (fileData.FileType === "csv") {
+      const res = await axios.get(
+        `http://localhost:3000/api/uploadDoc/deleteEveryClass/${data.courseId}/${fileData.fileId}`
+      );
 
+      if (res.data.status === 200) {
+        history.go(0);
+      }
+    } else if (fileData.FileType === "sbv") {
+      const res = await axios.get(
+        `http://localhost:3000/api/uploadDoc/deleteEveryClassSbv/${data.courseId}/${fileData.fileId}`
+      );
 
+      if (res.data.status === 200) {
+        history.go(0);
+      }
+    }
+  };
 
   //const [filena , setFilena] = React.useState(false);
 
@@ -158,86 +161,110 @@ const ClassroomNames = ({ data, loading }) => {
   };
 
   return (
-    
     <React.Fragment>
       <Box
         style={{
-          marginBottom: "20px",
           border: "1px solid #a9a9a9",
           padding: "20px",
           borderRadius: "4px",
         }}
       >
-        <Typography variant="h6">Classroom Names</Typography>
         <Box
           sx={{
-            display: "flex",
-            margin: "10px 0px",
+            marginBottom: "20px",
           }}
         >
-          <TextField
-            id="outlined-basic"
-            label="Enter Classroom Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            error={nameError}
-            variant="outlined"
-            size="small"
-          />
-          <Button
-            size="large"
-            sx={{
-              margin: "auto 10px",
-              padding: "4px 15px",
-            }}
-            variant="contained"
-            color="primary"
-            onClick={handleClick}
+          <Typography variant="h6">Classroom Names</Typography>
+          <Typography
+            style={{ fontSize: "0.85rem" }}
+            variant="text"
+            color="textSecondary"
           >
-            Enter
-          </Button>
+            &#42; Different names of the files, that you want to upload.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              margin: "10px 0px",
+            }}
+          >
+            <TextField
+              id="outlined-basic"
+              label="Enter Classroom Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              error={nameError}
+              variant="outlined"
+              size="small"
+            />
+            <Button
+              size="large"
+              sx={{
+                margin: "auto 10px",
+                padding: "4px 15px",
+              }}
+              variant="contained"
+              color="primary"
+              onClick={handleClick}
+            >
+              Enter
+            </Button>
+          </Box>
+          <Paper
+            sx={{
+              display: "flex",
+              //   justifyContent: "center",
+              flexWrap: "wrap",
+              listStyle: "none",
+              p: 0.5,
+              m: 0,
+            }}
+            component="ul"
+          >
+            {!loading && nameData ? (
+              nameData.map((data, index) => {
+                let icon;
+
+                if (data === "React") {
+                  icon = <TagFacesIcon />;
+                }
+
+                return (
+                  <ListItem key={index}>
+                    <Chip
+                      color="primary"
+                      icon={icon}
+                      label={data}
+                      onDelete={
+                        data === "React" ? undefined : handleDelete(data)
+                      }
+                    />
+                  </ListItem>
+                );
+              })
+            ) : (
+              <TailSpin heigth="21" width="21" color="rgb(33, 150, 243)" />
+            )}
+          </Paper>
         </Box>
-        <Paper
-          sx={{
-            display: "flex",
-            //   justifyContent: "center",
-            flexWrap: "wrap",
-            listStyle: "none",
-            p: 0.5,
-            m: 0,
-          }}
-          component="ul"
-        >
-          {!loading && nameData ? (
-            nameData.map((data, index) => {
-              let icon;
 
-              if (data === "React") {
-                icon = <TagFacesIcon />;
-              }
+        <hr style={{ width: "15%", textAlign: "left", marginLeft: "0px", height:"3px", borderRadius: "6px", border: "none", backgroundColor: blue[500] }} />
 
-              return (
-                <ListItem key={index}>
-                  <Chip
-                    color="primary"
-                    icon={icon}
-                    label={data}
-                    onDelete={data === "React" ? undefined : handleDelete(data)}
-                  />
-                </ListItem>
-              );
-            })
-          ) : (
-            <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
-          )}
-        </Paper>
+        {/* Cutt off time */}
         <Box
           sx={{
-            margin: "30px 0px 8px 0px",
+            margin: "20px 0px",
           }}
         >
-
-          <Typography variant="h6">Class Time</Typography>
+          <Typography variant="h6">Cut-off time</Typography>
+          <Typography
+            style={{ fontSize: "0.85rem" }}
+            variant="text"
+            color="textSecondary"
+          >
+            &#42; Minimum time a student must be present in the lecture to mark
+            his/her attendance.
+          </Typography>
           <Box
             sx={{
               display: "flex",
@@ -263,7 +290,7 @@ const ClassroomNames = ({ data, loading }) => {
               color="primary"
               onClick={handleCuttOffTimeClick}
             >
-              Submit
+              Update
             </Button>
           </Box>
           {!loading ? (
@@ -273,6 +300,23 @@ const ClassroomNames = ({ data, loading }) => {
           )}
         </Box>
 
+        <hr style={{ width: "15%", textAlign: "left", marginLeft: "0px", height:"3px", borderRadius: "6px", border: "none", backgroundColor: blue[500] }} />
+
+        {/* Class Parameters Weightage */}
+        <Box
+          sx={{
+            margin: "20px 0px",
+          }}
+        >
+          {!loading ? (
+            <ClassWeightage classData={data} loader={loading} />
+          ) : (
+            <TailSpin heigth="21" width="21" color="rgb(33, 150, 243)" />
+          )}
+        </Box>
+
+        <hr style={{ width: "15%", textAlign: "left", marginLeft: "0px", height:"3px", borderRadius: "6px", border: "none", backgroundColor: blue[500] }} />
+
         {/* Names of uploaded files */}
         <Box
           sx={{
@@ -280,6 +324,13 @@ const ClassroomNames = ({ data, loading }) => {
           }}
         >
           <Typography variant="h6">Files Uploaded</Typography>
+          <Typography
+            style={{ fontSize: "0.85rem" }}
+            variant="text"
+            color="textSecondary"
+          >
+            &#42; The files you have uploaded.
+          </Typography>
           <Paper
             sx={{
               display: "flex",
@@ -290,23 +341,28 @@ const ClassroomNames = ({ data, loading }) => {
             }}
             component="ul"
           >
-            {!loading && filesData ? (
-              // !filesData ? (<Typography variant="text" color="textSecondary">No files uploaded yet!</Typography>) :
-              filesData.map((data, index) => {
-                const a1 = data.uploadTime + " __" + data.FileType;
-                return (
-                  <ListItem key={index}>
-                    <Chip
-                      color="primary"
-                      label={a1}
-                      // label={data.fileId}
-                      onDelete={handleFilesDelete(data)}
-                    />
-                  </ListItem>
-                );
-              })
+            {!loading ? (
+              filesData == undefined || filesData.length == 0 ? (
+                <Typography variant="h6" color="textSecondary">
+                  No files uploaded yet!
+                </Typography>
+              ) : (
+                filesData.map((data, index) => {
+                  const a1 = data.uploadTime + " __" + data.FileType;
+                  return (
+                    <ListItem key={index}>
+                      <Chip
+                        color="primary"
+                        label={a1}
+                        // label={data.fileId}
+                        onDelete={handleFilesDelete(data)}
+                      />
+                    </ListItem>
+                  );
+                })
+              )
             ) : (
-              <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+              <TailSpin heigth="21" width="21" color="rgb(33, 150, 243)" />
             )}
           </Paper>
         </Box>
