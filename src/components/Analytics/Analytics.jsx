@@ -4,6 +4,7 @@ import { userContext } from "../../userContext";
 import FileUploader from "./FileUploader";
 import Navbar from "../Navbar";
 import StudentsTable from "./StudentsTable";
+import { useHistory } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { Container, Grid } from "@mui/material";
@@ -36,8 +37,10 @@ const useStyles = makeStyles({
 });
 
 const Analytics = () => {
+  const history = useHistory();
   const classes = useStyles();
   const { courseId } = useParams();
+  const { courseName } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const { user, setUser } = useContext(userContext);
   const [resp, setResp] = useState([]);
@@ -52,14 +55,23 @@ const Analytics = () => {
         const response = await axios.get(
           // `/api/teachers/teachersClass/${courseId}`
           `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
-          //`/api/teachers/teachersClass/136844541806`
         );
         //136844541806
         setResp(response.data);
         setStudentsData(response.data.StudentsData);
         setIsLoading(false);
       } catch (e) {
-        console.log("error occured  ", e);
+        const res1 = await axios.get(`/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`);
+        if (res1.data.status === 200) {
+          console.log("class created shyd");
+          setTimeout(() => {
+            // history.push(
+            //   `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+            // );
+            history.go(0);
+          }, 200);
+        }
+        //console.log("error occured here ", e);
       }
     };
 

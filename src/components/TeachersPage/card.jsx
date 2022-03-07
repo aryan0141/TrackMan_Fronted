@@ -27,7 +27,7 @@ const ClassroomCard = ({ item }) => {
 
   const history = useHistory();
   const classroomPage = (courseId) => {
-    history.push(`/analytics/${courseId}`);
+    history.push(`/analytics/${courseId}/${item.name}`);
   }
 
   console.log("Here");

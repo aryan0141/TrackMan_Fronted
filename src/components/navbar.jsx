@@ -44,17 +44,14 @@ const ResponsiveAppBar = () => {
   };
 
   const handleLogOut = () => {
-      console.log("a");
+
      Cookies.remove("userInfo");
-     console.log("b");
      setTimeout(() => {
        //history.go(0);
        history.push("/");
        history.go(0);
-       console.log("Hello, World!");
      }, 1000);
       // history.push("/");
-      // console.log("c");
     };
 
   const handleContact = () => {
@@ -63,7 +60,7 @@ const ResponsiveAppBar = () => {
 
   const handleClassrooms = () => {
       history.push("/teachersPage");
-    };
+  };
 
   const { user, setUser } = useContext(userContext);
   //const geeks = "https://www.w3schools.com/images/w3schools_green.jpg";

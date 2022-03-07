@@ -77,7 +77,7 @@ function App() {
               </Route>
             )}
             {user && user.email && (
-              <Route path="/analytics/:courseId">
+              <Route path="/analytics/:courseId/:courseName">
                 <Analytics />
               </Route>
             )}
