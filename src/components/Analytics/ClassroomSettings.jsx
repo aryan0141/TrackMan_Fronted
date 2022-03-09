@@ -86,6 +86,7 @@ const ClassroomNames = ({ data, loading }) => {
       } else if (res.data.status === 200) {
         console.log("Lets delete it");
         setNameData((name) => name.filter((name) => name !== nameToDelete));
+        history.go(0);
         //setNameData([...nameData,name]);
       }
 
@@ -152,6 +153,7 @@ const ClassroomNames = ({ data, loading }) => {
         alert(res.data.msg);
       } else if (res.data.status === 200) {
         setNameData([...nameData, name]);
+        history.go(0);
       }
     } catch (e) {
       console.log(e);
