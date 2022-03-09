@@ -13,7 +13,6 @@ import { Box } from "@mui/system";
 import { blue, green, orange, red } from "@mui/material/colors";
 import { amber } from "@material-ui/core/colors";
 import { Footer } from "../Footer";
-import { Filters } from "./Filters";
 import ClassroomNames from "./ClassroomSettings";
 import { TailSpin } from "react-loader-spinner";
 import { makeStyles } from "@material-ui/core";
@@ -21,18 +20,14 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles({
   vertiHoriCenter: {
     display: "flex",
-    // height: "90vh",
-    // backgroundColor: "purple",
     justifyContent: "center",
     alignItems: "center",
   },
   cards: {
     backgroundColor: "white",
-    // minHeight: "40px",
     padding: "15px",
     boxShadow: "1px 3px 10px rgb(0 0 0 / 0.2)",
     borderRadius: "3px",
-    // margin: "5px",
   },
 });
 
@@ -193,12 +188,6 @@ const Analytics = () => {
 
         <ClassroomNames data={resp} loading={isLoading} />
 
-        {/* Filters */}
-        {/* {!isLoading ? (
-          <Filters data={resp.StudentsData} onChange = {(data) => setStudentsData(data)} />
-        ) : (
-          <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
-        )} */}
         <Typography
           variant="h5"
           color="textSecondary"

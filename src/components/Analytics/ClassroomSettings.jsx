@@ -10,12 +10,14 @@ import { Box } from "@mui/system";
 import { TailSpin } from "react-loader-spinner";
 import { ClassWeightage } from "./ClassWeightage";
 import { blue, green, orange, yellow } from "@mui/material/colors";
+import { useAlert } from 'react-alert'
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
 const ClassroomNames = ({ data, loading }) => {
+  const alert = useAlert()
   var a1 = ``;
   
   const history = useHistory();
@@ -40,7 +42,6 @@ const ClassroomNames = ({ data, loading }) => {
   }, [loading]);
 
   const handleFilesDelete = (fileData) => async () => {
-    //alert(data._id);
     if (fileData.FileType === "csv") {
       const res = await axios.get(
         `http://localhost:3000/api/uploadDoc/deleteEveryClass/${data.courseId}/${fileData.fileId}`
@@ -48,6 +49,7 @@ const ClassroomNames = ({ data, loading }) => {
 
       if (res.data.status === 200) {
         history.go(0);
+        alert.success('Deleted Successfully');
       }
     } else if (fileData.FileType === "sbv") {
       const res = await axios.get(
@@ -56,16 +58,15 @@ const ClassroomNames = ({ data, loading }) => {
 
       if (res.data.status === 200) {
         history.go(0);
+        alert.success('Deleted Successfully');
       }
     }
   };
 
-  //const [filena , setFilena] = React.useState(false);
-
   const handleDelete = (nameToDelete) => async () => {
     try {
       if (nameData.length <= 1) {
-        alert("You cannot delete the last name");
+        alert.error("You must have atleast one name")
         return;
       }
 
@@ -81,16 +82,13 @@ const ClassroomNames = ({ data, loading }) => {
         { filename }
       );
       if (res.data.status === 400) {
-        alert(res.data.msg);
-        // return;
+        alert.error(res.data.msg);
       } else if (res.data.status === 200) {
-        console.log("Lets delete it");
         setNameData((name) => name.filter((name) => name !== nameToDelete));
+        alert.success('Deleted Successfully');
         history.go(0);
         //setNameData([...nameData,name]);
       }
-
-      //setNameData((name) => name.filter((name) => name !== nameToDelete));
     } catch (err) {
       console.log(err);
     }
@@ -114,7 +112,7 @@ const ClassroomNames = ({ data, loading }) => {
         { cuttOffMin1 }
       );
       if (res.data.status === 400) {
-        alert(res.data.msg);
+        alert.error(res.data.msg);
         // return;
       } else if (res.data.status === 200) {
         //console.log("Success 123");
@@ -150,7 +148,7 @@ const ClassroomNames = ({ data, loading }) => {
       );
       console.log(res);
       if (res.data.status === 400) {
-        alert(res.data.msg);
+        alert.error(res.data.msg);
       } else if (res.data.status === 200) {
         setNameData([...nameData, name]);
         history.go(0);

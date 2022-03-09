@@ -5,6 +5,7 @@ import { userContext } from '../../userContext';
 import ClassroomCard from './card';
 import Navbar from '../Navbar';
 import { Container, Grid } from "@mui/material";
+import { Box } from "@mui/system";
 
 // const load = async (email) => {
 //   const resp = await axios.get(`/api/users/courseList/${email}`);
@@ -42,15 +43,16 @@ const TeachersPage = () => {
   return (
     <React.Fragment>
       <Navbar />
-      <Container style={{marginTop: "50px"}}>
+      <Box style={{margin: "30px"}}>
         <Grid container spacing={2}>
           {!isLoading ? (resp.courses.map((item) => (
-            <Grid key={item.id} item xs={12} sm={6} md={6} lg={4}>
+            <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
               <ClassroomCard item={item} />
             </Grid>
           ))) : <p>Loading</p>}
         </Grid>
-      </Container>
+      </Box>
+
     </React.Fragment>
   );
 };

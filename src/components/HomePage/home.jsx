@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import Navbar from '../Navbar';
 import Intro from './Intro';
 import styled from 'styled-components';
+import { Footer } from "../Footer";
 
 
 const Container = styled.div`
@@ -19,6 +20,7 @@ const Home = () => {
       <Navbar/>
       {/* <div>{msg}</div> */}
       <Intro/>
+      <Footer />
     </Container>
   );
 };
