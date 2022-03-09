@@ -30,7 +30,6 @@ const TeachersPage = () => {
         setIsLoading(false);
       }catch(e)
       {
-        
         console.log("error occured  " , e)
       }
     }

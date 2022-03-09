@@ -81,7 +81,9 @@ function App() {
                 <Analytics />
               </Route>
             )}
-            <Route path="/contacts"><Contact/></Route>
+            <Route path="/contacts">
+              <Contact />
+            </Route>
           </userContext.Provider>
 
           {/* 

@@ -53,6 +53,7 @@ const Analytics = () => {
         const response = await axios.get(
           // `/api/teachers/teachersClass/${courseId}`
           `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+          //`/api/teachers/teachersClass/136844541806`
         );
         // console.log(response)
         //136844541806

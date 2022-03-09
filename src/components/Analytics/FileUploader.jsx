@@ -9,8 +9,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import LinearProgress from "@mui/material/LinearProgress";
 // import {ProgressBar} from 'react-bootstrap';
 
-const FileUploader = ({ courseId, resp: { fileNames } })  => {
-  // console.log(fileNames);
+const FileUploader = ({ courseId, resp: {fileNames} }) => {
   const [file, setFile] = useState(null);
   const [uploadBtnDisabled, setUploadBtnDisabled] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
@@ -21,7 +20,7 @@ const FileUploader = ({ courseId, resp: { fileNames } })  => {
 
   const history = useHistory();
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     if (file == null) {
       alert("Select a file first");
       return;
@@ -35,22 +34,20 @@ const FileUploader = ({ courseId, resp: { fileNames } })  => {
       alert("Select a Valid .csv or .sbv type File");
       return;
     }
-
-    // if (extension === "csv") {
-    //   // const filename2 = arr[0];
-    //   const st1 = fileName1.split(" - Attendance Report.csv");
-    //   const st2 = st1[0];
-    //   const st3 = st2.substring(17, st2.length);
-    //   console.log(st3);
-    //   if (!fileNames.includes(st3)) {
-    //     alert("Filename not allowed for this class");
-    //     return;
-    //   }
-    //   // else{
-
-    //   // }
-    // }
     //console.log(file);
+    if(extension==="csv"){
+      //const filename2 = arr[0];
+      const st1 = fileName1.split(" - Attendance Report.csv");
+      const st2 = st1[0];
+      const st3 = st2.substring(17, st2.length);
+      console.log(st3);
+      if(!fileNames.includes(st3)){
+        alert("FileName not allowed for this class");
+        return;
+      }else{
+
+      }
+    }
     setUploadBtnDisabled(true);
     e.preventDefault();
 
@@ -69,22 +66,6 @@ const FileUploader = ({ courseId, resp: { fileNames } })  => {
       },
     };
 
-    // const res11 = await axios.post("/api/uploadDoc/upload", data, options);
-    // if(res11.data.status===200){
-    //   setUploadPercentage(100);
-    //   setTimeout(() => {
-    //     setUploadPercentage(0);
-    //     setUploadBtnDisabled(false);
-    //     setFile(null);
-    //   }, 1000);
-    //   const fileName = String(res11.data.originalname);
-    //   const res12 = await axios.post(`/api/uploadDoc/addClass`, { fileName });
-    //   if(res12.data.status===200){
-    //     console.log("OK ADDED");
-    //     history.go(0);
-    //   }
-    // }
-
     axios.post("/api/uploadDoc/upload", data, options).then((res) => {
       console.log(res, "INSIDE");
 
@@ -94,23 +75,18 @@ const FileUploader = ({ courseId, resp: { fileNames } })  => {
       console.log(fileName);
       // var fileName = req.files.upload.name;
 
-      axios.post(`/api/uploadDoc/addClass` , {fileName}).then((res1) =>{
-          console.log("Ok printed");
-          console.log(res1);
-          history.go(0);
-          // history.push(`/analytics/${courseId}`);
+      // axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
+      //     console.log("Ok printed");
+      //     history.push(`/analytics/${courseId}`);
 
-      }).catch((e)=>{
-          console.log("error" , e)
-      })
+      // }).catch((e)=>{
+      //     console.log("error" , e)
+      // })
 
-      // const res12 = await axios.post(`/api/uploadDoc/addClass`, { fileName });
-      // if (res12.data.status === 400) {
-      //   alert(res.data.msg);
-      // }
-      // if (res12.data.status === 200) {
-      //   history.go(0);
-      // }
+      const res12 = axios.post(`/api/uploadDoc/addClass`, { fileName });
+      if (res12) {
+        history.go(0);
+      }
       console.log("Success");
 
       setUploadPercentage(100);
