@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
 export const Filters = (props) => {
   const [age, setAge] = React.useState("");
@@ -22,7 +22,7 @@ export const Filters = (props) => {
     const value = event.target.value;
     setAge(value);
     if (value === "attendance") {
-      const sortedData = props.data.sort((a, b) =>
+      const sortedData = props.studentsData.sort((a, b) =>
         a.classesAttended < b.classesAttended
           ? 1
           : a.classesAttended === b.classesAttended
@@ -31,9 +31,9 @@ export const Filters = (props) => {
             : -1
           : -1
       );
-      props.onChange(sortedData);
+      props.onChange(sortedData, searchQuery);
     } else if (value === "mins_watched") {
-      const sortedData = props.data.sort((a, b) =>
+      const sortedData = props.studentsData.sort((a, b) =>
         a.duration < b.duration
           ? 1
           : a.duration === b.duration
@@ -42,10 +42,9 @@ export const Filters = (props) => {
             : -1
           : -1
       );
-      console.log("SortedData", sortedData);
-      props.onChange(sortedData);
+      props.onChange(sortedData, searchQuery);
     } else if (value === "comments") {
-      const sortedData = props.data.sort((a, b) =>
+      const sortedData = props.studentsData.sort((a, b) =>
         a.comments < b.comments
           ? 1
           : a.comments === b.comments
@@ -54,52 +53,39 @@ export const Filters = (props) => {
             : -1
           : -1
       );
-      props.onChange(sortedData);
+      props.onChange(sortedData, searchQuery);
+    } else if (value === "name") {
+      const sortedData = props.studentsData.sort((a, b) =>
+        a.name > b.name
+          ? 1
+          : a.name === b.name
+          ? a.size > b.size
+            ? 1
+            : -1
+          : -1
+      );
+      props.onChange(sortedData, searchQuery);
     }
   };
 
-  // function sortData(value) {
-  //   if(value === "attendance") {
-  //     const sortedData = props.data.sort((a, b) => (a.classesAttended < b.classesAttended) ? 1 : (a.classesAttended === b.classesAttended) ? ((a.size > b.size) ? 1 : -1) : -1 );
-  //     props.onChange(sortedData);
-  //   } else if(value === "mins_watched") {
-  //     console.log("Andar aaya hun!");
-  //     const sortedData = props.data.sort((a, b) => (a.duration < b.duration) ? 1 : (a.duration === b.duration) ? ((a.size > b.size) ? 1 : -1) : -1 );
-  //     console.log("SortedData", sortedData);
-  //     props.onChange(sortedData);
-  //   } else if(value === "comments") {
-  //     const sortedData = props.data.sort((a, b) => (a.comments < b.comments) ? 1 : (a.comments === b.comments) ? ((a.size > b.size) ? 1 : -1) : -1 );
-  //     props.onChange(sortedData);
-  //   }
-  // }
-
   function cropData(value) {
     if (props.data.length >= parseInt(value)) {
-      props.onChange(props.data.slice(0, parseInt(value)));
+      props.onChange(props.data.slice(0, parseInt(value)), searchQuery);
     } else {
-      props.onChange(props.data);
+      props.onChange(props.data, searchQuery);
     }
-    // console.log(data);
   }
 
   function searchData(value) {
     setSearchQuery(value);
     console.log(searchQuery);
-    props.onChange(props.data, value);
+    props.onChange(props.studentsData, value);
   }
 
   return (
     <React.Fragment>
-      <Typography
-        style={{ paddingTop: "20px" }}
-        variant="h5"
-        color="textSecondary"
-      >
-        Filters
-      </Typography>
       <Box
         style={{
-          // boxShadow: "1px 3px 10px rgb(0 0 0 / 0.2)",
           border: "1px solid #a9a9a9",
           borderRadius: "3px",
           padding: "20px",
@@ -142,7 +128,18 @@ export const Filters = (props) => {
           />
         </RadioGroup>
         <Grid container spacing={2}>
-          <Grid item>
+          <Grid item xlg={6} lg={6} md={6} sm={12}>
+            <TextField
+              style={{ width: "100%", margin: "10px 0px" }}
+              helperText="Search by Name or Roll No."
+              id="demo-helper-text-aligned-no-helper"
+              label="Search"
+              value={searchQuery}
+              onChange={(e) => searchData(e.target.value)}
+              size="small"
+            />
+          </Grid>
+          <Grid item xlg={6} lg={6} md={6} sm={12}>
             <FormControl style={{ width: "100%", margin: "10px 0px" }}>
               <InputLabel id="demo-simple-select-autowidth-label" size="small">
                 Sort By
@@ -159,24 +156,13 @@ export const Filters = (props) => {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {/* <MenuItem value={22}>Roll No.</MenuItem> */}
+                <MenuItem value={"name"}>Name</MenuItem>
                 <MenuItem value={"attendance"}>Attendance</MenuItem>
                 <MenuItem value={"mins_watched"}>Time Watched</MenuItem>
                 <MenuItem value={"comments"}>Chat Score</MenuItem>
                 {/* <MenuItem value={24}>Overall Score</MenuItem> */}
               </Select>
             </FormControl>
-          </Grid>
-          <Grid item>
-            <TextField
-              helperText="Search by Name or Roll No."
-              id="demo-helper-text-aligned-no-helper"
-              label="Search"
-              value={searchQuery}
-              onChange={(e) => searchData(e.target.value)}
-              style={{ margin: "10px 0px" }}
-              size="small"
-            />
           </Grid>
         </Grid>
       </Box>

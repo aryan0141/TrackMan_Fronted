@@ -30,9 +30,9 @@ function Row({ data, classroomDetails }) {
     : 0;
   const normalizedChats = totalChats ? data.comments / totalChats : 0;
   const overallScore = (
-    normalizedAttendance * 20 +
-    normalizedTime * 30 +
-    normalizedChats * 50
+    normalizedAttendance * classroomDetails.weightAge[1] +
+    normalizedTime * classroomDetails.weightAge[0] +
+    normalizedChats * classroomDetails.weightAge[2]
   ).toFixed(2);
 
   const minsWathched =
@@ -65,6 +65,15 @@ function Row({ data, classroomDetails }) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography>Email: {data.email}</Typography>
+              <Typography>
+                Attendance:{" "}
+                {classroomDetails.totalClasses == 0
+                  ? 0
+                  : `${
+                      (data.classesAttended / classroomDetails.totalClasses) *
+                      100
+                    }%`}
+              </Typography>
             </Box>
           </Collapse>
         </TableCell>
@@ -75,7 +84,7 @@ function Row({ data, classroomDetails }) {
 
 export default function CollapsibleTable({ resp, studentsData }) {
   // const data = studentsData;
-  // console.log("Welcome", studentsData);
+  console.log(resp);
 
   const [data, setData] = React.useState(studentsData);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -85,7 +94,11 @@ export default function CollapsibleTable({ resp, studentsData }) {
       <Filters
         data={resp.StudentsData}
         query={searchQuery}
-        onChange={(data, query) => {setData(data); setSearchQuery(query)}}
+        studentsData={data}
+        onChange={(data, query) => {
+          setData([...data]);
+          setSearchQuery(query);
+        }}
       />
       <TableContainer
         component={Paper}
@@ -107,9 +120,17 @@ export default function CollapsibleTable({ resp, studentsData }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.filter((data) => data.name.toLowerCase().includes(searchQuery)).map((data, index) => (
-              <Row key={index} data={data} classroomDetails={resp} />
-            ))}
+            {data.length == 0 ? (
+              <Typography variant="text" color="textSecondary">
+                No results found
+              </Typography>
+            ) : (
+              data
+                .filter((data) => data.name.toLowerCase().includes(searchQuery))
+                .map((data, index) => (
+                  <Row key={index} data={data} classroomDetails={resp} />
+                ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

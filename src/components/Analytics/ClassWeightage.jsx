@@ -3,6 +3,7 @@ import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { TailSpin } from "react-loader-spinner";
 import axios from "axios";
+import { useAlert } from 'react-alert'
 
 export const ClassWeightage = ({ classData, loader }) => {
   const [time, setTime] = React.useState(classData.weightAge[0]);
@@ -14,11 +15,7 @@ export const ClassWeightage = ({ classData, loader }) => {
   const [comments, setComments] = React.useState(classData.weightAge[2]);
   const [commentsError, setCommentsError] = React.useState(false);
 
-  // React.useEffect(() => {
-  //   setTime(classData.cutOffMins);
-  //   setAttendance(classData.cutOffMins);
-  //   setComments(classData.cutOffMins);
-  // }, [loader]);
+  const alert = useAlert()
 
   const handleUpdate = async () => {
     if (time == "") {
@@ -38,7 +35,7 @@ export const ClassWeightage = ({ classData, loader }) => {
       setTimeError(true);
       setAttendanceError(true);
       setCommentsError(true);
-      alert("Sum of all three must be equal to 100");
+      alert.error('Total sum must be equal to 100')
       return;
     }
 
@@ -54,13 +51,13 @@ export const ClassWeightage = ({ classData, loader }) => {
       weightAgeDoc,
     });
     if (resp.data.status === 200) {
-      //alert("AAAA");
       setTime(time);
       setAttendance(attendance);
       setComments(comments);
       setTimeError(false);
       setAttendanceError(false);
       setCommentsError(false);
+      alert.success('Updated Succesfully')
     }
   };
 
