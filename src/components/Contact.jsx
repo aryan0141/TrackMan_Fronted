@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
 import React from 'react'
 
-export const Contact = () => {
+const Contact = () => {
   return (
     <div style={{display: "flex", justifyContent: "center", alignContent: "center"}}>
         <Typography variant="h5">
@@ -17,3 +17,5 @@ export const Contact = () => {
     </div>
   )
 }
+
+export default Contact;

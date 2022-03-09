@@ -13,7 +13,12 @@ import {
 import React, { useState, useEffect } from "react";
 import Home from "./components/HomePage/home";
 import TeachersPage from "./components/TeachersPage/TeachersPage";
+<<<<<<< HEAD
 import Analytics from "./components/Analytics/Analytics";
+=======
+import Analytics from './components/Analytics/Analytics';
+import Contact from "./components/Contact.jsx";
+>>>>>>> upstream/master
 import { userContext } from "./userContext";
 import { blue, red } from "@mui/material/colors";
 // import { createTheme } from "@mui/material";
@@ -89,7 +94,7 @@ function App() {
                 </Route>
               )}
               {user && user.email && (
-                <Route path="/analytics/:courseId">
+                <Route path="/analytics/:courseId/:courseName">
                   <Analytics />
                 </Route>
               )}

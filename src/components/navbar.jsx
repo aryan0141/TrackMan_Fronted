@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
 import { userContext } from "../userContext";
+import { useHistory } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,11 +14,13 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import Cookies from "js-cookie";
 
 const pages = ["Classrooms", "Contact"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const ResponsiveAppBar = () => {
+  const history = useHistory();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -35,6 +38,33 @@ const ResponsiveAppBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleTrackman = () => {
+    history.push("/");
+  };
+
+  const handleLogOut = () => {
+      console.log("a");
+     Cookies.remove("userInfo");
+     console.log("b");
+     setTimeout(() => {
+       //history.go(0);
+       history.push("/");
+       history.go(0);
+       console.log("Hello, World!");
+     }, 1000);
+      // history.push("/");
+      // console.log("c");
+    };
+
+  const handleContact = () => {
+    history.push("/contacts");    
+  }
+
+  const handleClassrooms = () => {
+      history.push("/teachersPage");
+    };
+
   const { user, setUser } = useContext(userContext);
   //const geeks = "https://www.w3schools.com/images/w3schools_green.jpg";
   //console.log(user.picture);
@@ -46,7 +76,12 @@ const ResponsiveAppBar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              cursor: "pointer",
+            }}
+            onClick={handleTrackman}
           >
             Trackman
           </Typography>
@@ -85,6 +120,9 @@ const ResponsiveAppBar = () => {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
+              {/* <MenuItem key={"Contacts"} onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{"Contacts"}</Typography>
+              </MenuItem> */}
             </Menu>
           </Box>
           <Typography
@@ -96,7 +134,7 @@ const ResponsiveAppBar = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {/* {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -104,7 +142,21 @@ const ResponsiveAppBar = () => {
               >
                 {page}
               </Button>
-            ))}
+            ))} */}
+            <Button
+              key="Classrooms"
+              onClick={handleClassrooms}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Classrooms
+            </Button>
+            <Button
+              key="Contacts"
+              onClick={handleContact}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Contacts
+            </Button>
           </Box>
 
           {user && (
@@ -132,12 +184,16 @@ const ResponsiveAppBar = () => {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">Welcome, {user.name}</Typography>
+                  <Typography textAlign="center">
+                    Welcome, {user.name}
+                  </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">Email: {user.email}</Typography>
+                  <Typography textAlign="center">
+                    Email: {user.email}
+                  </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
+                <MenuItem onClick={handleLogOut}>
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
 

@@ -26,7 +26,7 @@ const ClassroomCard = ({ item, color }) => {
 
   const history = useHistory();
   const classroomPage = (courseId) => {
-    history.push(`/analytics/${courseId}`);
+    history.push(`/analytics/${courseId}/${item.name}`);
   };
 
   return (

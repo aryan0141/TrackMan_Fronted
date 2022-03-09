@@ -9,7 +9,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import LinearProgress from "@mui/material/LinearProgress";
 // import {ProgressBar} from 'react-bootstrap';
 
-const FileUploader = ({ courseId }) => {
+const FileUploader = ({ courseId, resp: {fileNames} }) => {
   const [file, setFile] = useState(null);
   const [uploadBtnDisabled, setUploadBtnDisabled] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
@@ -35,6 +35,19 @@ const FileUploader = ({ courseId }) => {
       return;
     }
     //console.log(file);
+    if(extension==="csv"){
+      //const filename2 = arr[0];
+      const st1 = fileName1.split(" - Attendance Report.csv");
+      const st2 = st1[0];
+      const st3 = st2.substring(17, st2.length);
+      console.log(st3);
+      if(!fileNames.includes(st3)){
+        alert("FileName not allowed for this class");
+        return;
+      }else{
+
+      }
+    }
     setUploadBtnDisabled(true);
     e.preventDefault();
 
