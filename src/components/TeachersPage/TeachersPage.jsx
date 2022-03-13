@@ -1,11 +1,12 @@
-import React, { useState , useEffect,useContext} from "react";
-import styled from 'styled-components';
-import axios from 'axios';
-import { userContext } from '../../userContext';
-import ClassroomCard from './card';
-import Navbar from '../Navbar';
+import React, { useState, useEffect, useContext } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import { userContext } from "../../userContext";
+import ClassroomCard from "./card";
+import Navbar from "../Navbar";
 import { Container, Grid } from "@mui/material";
 import { Box } from "@mui/system";
+import { useHistory } from "react-router-dom";
 
 // const load = async (email) => {
 //   const resp = await axios.get(`/api/users/courseList/${email}`);
@@ -13,46 +14,51 @@ import { Box } from "@mui/system";
 //   return(resp.data);
 // }
 
-
-
 const TeachersPage = () => {
-  const [isLoading , setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const history = useHistory();
+  const { user, setUser } = useContext(userContext);
 
-  const { user, setUser} = useContext(userContext);
+  const [resp, setResp] = useState([]);
 
-  const [resp , setResp] = useState([]);
+  useEffect(() => {
+    if (!user || !user.email) {
+      history.push("/");
+      return;
+    }
 
-  useEffect(()=>{
     const getItems = async () => {
-      try{
+      try {
         setIsLoading(true);
         const response = await axios.get(`/api/users/courseList/${user.email}`);
         setResp(response.data);
         setIsLoading(false);
-      }catch(e)
-      {
-        console.log("error occured  " , e)
+      } catch (e) {
+        console.log("error occured  ", e);
       }
-    }
-    
+    };
+
     getItems();
-  },[])
+  }, [user]);
 
   console.log(resp);
-  
+
   return (
     <React.Fragment>
       <Navbar />
-      <Box style={{margin: "30px"}}>
+      <Box style={{ margin: "30px" }}>
         <Grid container spacing={2}>
-          {!isLoading ? (resp.courses.map((item) => (
-            <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
-              <ClassroomCard item={item} />
-            </Grid>
-          ))) : <p>Loading</p>}
+          {!isLoading ? (
+            resp.courses.map((item) => (
+              <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
+                <ClassroomCard item={item} />
+              </Grid>
+            ))
+          ) : (
+            <p>Loading</p>
+          )}
         </Grid>
       </Box>
-
     </React.Fragment>
   );
 };

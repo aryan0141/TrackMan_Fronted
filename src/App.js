@@ -13,12 +13,8 @@ import {
 import React, { useState, useEffect } from "react";
 import Home from "./components/HomePage/home";
 import TeachersPage from "./components/TeachersPage/TeachersPage";
-<<<<<<< HEAD
 import Analytics from "./components/Analytics/Analytics";
-=======
-import Analytics from './components/Analytics/Analytics';
 import Contact from "./components/Contact.jsx";
->>>>>>> upstream/master
 import { userContext } from "./userContext";
 import { blue, red } from "@mui/material/colors";
 // import { createTheme } from "@mui/material";
@@ -30,6 +26,7 @@ import Cookies from "js-cookie";
 
 import { Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
+import NotFound from "./components/NotFound";
 
 const theme = createTheme({
   palette: {
@@ -70,9 +67,11 @@ function App() {
             picture: resp.data.picture,
             access_token: userInfo,
           };
-
           setUser(currUser);
         });
+    } else {
+      Cookies.remove("userInfo");
+      setUser(null);
     }
   };
   useEffect(() => {
@@ -85,19 +84,29 @@ function App() {
         <Router>
           <Switch>
             <userContext.Provider value={{ user, setUser }}>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              {user && user.email && (
+              <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route path="/contacts">
+                  <Contact />
+                </Route>
+                {/* {user && user.email ? ( */}
                 <Route path="/teachersPage">
                   <TeachersPage />
                 </Route>
-              )}
-              {user && user.email && (
+                {/* ) : ( */}
+                {/* <Redirect to="/" /> */}
+                {/* )} */}
+                {/* {user && user.email ? ( */}
                 <Route path="/analytics/:courseId/:courseName">
                   <Analytics />
                 </Route>
-              )}
+                {/* ) : ( */}
+                {/* <Redirect to="/" /> */}
+                {/* )} */}
+                <Route component={NotFound} />
+              </Switch>
             </userContext.Provider>
 
             {/* 
