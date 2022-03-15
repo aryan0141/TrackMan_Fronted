@@ -16,6 +16,7 @@ import { useHistory } from "react-router-dom";
 
 const TeachersPage = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [permission, setPermission] = useState(false);
   const history = useHistory();
   const { user, setUser } = useContext(userContext);
 
@@ -31,12 +32,22 @@ const TeachersPage = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(`/api/users/courseList/${user.email}`);
+        if (response.data.status === 400) {
+          console.log("error occured  ");
+          setPermission(true);
+        }
+        else{
         setResp(response.data);
         setIsLoading(false);
+        }
       } catch (e) {
-        console.log("error occured  ", e);
+        // setPermission(true);
+        console.log("error occured  ");
+        console.log(e);
       }
     };
+
+    // if (response.data.status === 200) {
 
     getItems();
   }, [user]);
@@ -57,6 +68,9 @@ const TeachersPage = () => {
           ) : (
             <p>Loading</p>
           )}
+        </Grid>
+        <Grid container spacing={2}>
+          { permission && <p>No permission , Try login again and make sure ticking the permissions required</p>}
         </Grid>
       </Box>
     </React.Fragment>
