@@ -16,6 +16,7 @@ import { Footer } from "../Footer";
 import ClassroomNames from "./ClassroomSettings";
 import { TailSpin } from "react-loader-spinner";
 import { makeStyles } from "@material-ui/core";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles({
   vertiHoriCenter: {
@@ -32,6 +33,7 @@ const useStyles = makeStyles({
 });
 
 const Analytics = () => {
+  // const navigate=useNavigate()
   const history = useHistory();
   const classes = useStyles();
   const { courseId } = useParams();
@@ -42,6 +44,7 @@ const Analytics = () => {
   const [studentsData, setStudentsData] = useState([]);
 
   useEffect(() => {
+<<<<<<< HEAD
     const getItems = async () => {
       try {
         setIsLoading(true);
@@ -71,9 +74,48 @@ const Analytics = () => {
         //console.log("error occured here ", e);
       }
     };
+=======
+    if (!Cookies.get("userInfo")) {
+      history.push("/");
+      return;
+    }
+>>>>>>> upstream/master
 
-    getItems();
-  }, []);
+    if (user && user.email) {
+      const getItems = async () => {
+        try {
+          setIsLoading(true);
+          const response = await axios.get(
+            // `/api/teachers/teachersClass/${courseId}`
+            `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+            //`/api/teachers/teachersClass/136844541806`
+          );
+          // console.log(response)
+          //136844541806
+          setResp(response.data);
+          setStudentsData(response.data.StudentsData);
+          setIsLoading(false);
+        } catch (e) {
+          const res1 = await axios.get(
+            `/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
+          );
+          if (res1.data.status === 200) {
+            console.log("class created shyd");
+            setTimeout(() => {
+              // history.push(
+              //   `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+              // );
+              history.go(0);
+            }, 200);
+          }
+          //console.log("error occured here ", e);
+        }
+      };
+
+      getItems();
+    }
+
+  }, [user]);
 
   return (
     <React.Fragment>

@@ -58,7 +58,7 @@ const Intro = () => {
     axios
       .post("/api/users/create-tokens", { code })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         Cookies.set("userInfo", response.data.access_token, {
           expires: 0.04,
           path: "/",
@@ -138,8 +138,9 @@ const Intro = () => {
               responseType="code"
               accessType="offline"
               prompt="select_account"
-              scope="openid email profile https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.profile.emails"
+              scope="openid email profile https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.profile.emails"
               //prompt='consent'
+              //
               //approval_prompt='force'
             />
           </Box>

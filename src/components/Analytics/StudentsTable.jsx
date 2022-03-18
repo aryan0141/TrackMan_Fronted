@@ -65,6 +65,12 @@ function Row({ data, classroomDetails }) {
 }
 
 export default function CollapsibleTable({ resp, studentsData }) {
+<<<<<<< HEAD
+=======
+  // const data = studentsData;
+  //console.log(resp);
+
+>>>>>>> upstream/master
   const [data, setData] = React.useState(studentsData);
   const [wait, setWait] = React.useState(true);
   React.useEffect(() => {
