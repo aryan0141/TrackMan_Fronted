@@ -17,24 +17,6 @@ import { Filters } from "./Filters";
 
 function Row({ data, classroomDetails }) {
   const [open, setOpen] = React.useState(false);
-  const totalChats = 0;
-  for (var i = 0; i < data.length; i++) {
-    totalChats += data[i].comments;
-  }
-
-  const normalizedAttendance = classroomDetails.totalClasses
-    ? data.classesAttended / classroomDetails.totalClasses
-    : 0;
-  const normalizedTime = classroomDetails.totalDuration
-    ? data.duration / classroomDetails.totalDuration
-    : 0;
-  const normalizedChats = totalChats ? data.comments / totalChats : 0;
-  const overallScore = (
-    normalizedAttendance * classroomDetails.weightAge[1] +
-    normalizedTime * classroomDetails.weightAge[0] +
-    normalizedChats * classroomDetails.weightAge[2]
-  ).toFixed(2);
-
   const minsWathched =
     data.duration > 180
       ? `${parseInt(data.duration / 60)}hrs ${parseInt(data.duration % 60)}mins`
@@ -58,7 +40,7 @@ function Row({ data, classroomDetails }) {
         <TableCell align="center">{data.classesAttended}</TableCell>
         <TableCell align="center">{minsWathched}</TableCell>
         <TableCell align="center">{data.comments}</TableCell>
-        <TableCell align="center">{overallScore}</TableCell>
+        <TableCell align="center">{data.overallScore}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -83,10 +65,30 @@ function Row({ data, classroomDetails }) {
 }
 
 export default function CollapsibleTable({ resp, studentsData }) {
-  // const data = studentsData;
-  console.log(resp);
-
   const [data, setData] = React.useState(studentsData);
+  const [wait, setWait] = React.useState(true);
+  React.useEffect(() => {
+    var totalChats = 0;
+    for (var i = 0; i < data.length; i++) {
+      totalChats += data[i].comments;
+    }
+    data.forEach((object) => {
+      const normalizedAttendance = resp.totalClasses
+        ? object.classesAttended / resp.totalClasses
+        : 0;
+      const normalizedTime = resp.totalDuration
+        ? object.duration / resp.totalDuration
+        : 0;
+      const normalizedChats = totalChats ? object.comments / totalChats : 0;
+      const overallScore = (
+        normalizedAttendance * resp.weightAge[1] +
+        normalizedTime * resp.weightAge[0] +
+        normalizedChats * resp.weightAge[2]
+      ).toFixed(2);
+      object.overallScore = parseFloat(overallScore);
+      setWait(false);
+    });
+  }, []);
   const [searchQuery, setSearchQuery] = React.useState("");
 
   return (
@@ -114,24 +116,28 @@ export default function CollapsibleTable({ resp, studentsData }) {
               <TableCell />
               <TableCell>Name</TableCell>
               <TableCell align="center">Classes Attented</TableCell>
-              <TableCell align="center">Min Watched</TableCell>
+              <TableCell align="center">Time Watched</TableCell>
               <TableCell align="center">Chats Score</TableCell>
               <TableCell align="center">Overall Score</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {data.length == 0 ? (
-              <Typography variant="text" color="textSecondary">
-                No results found
-              </Typography>
-            ) : (
-              data
-                .filter((data) => data.name.toLowerCase().includes(searchQuery))
-                .map((data, index) => (
-                  <Row key={index} data={data} classroomDetails={resp} />
-                ))
-            )}
-          </TableBody>
+          {wait ? null : (
+            <TableBody>
+              {data.length == 0 ? (
+                <Typography variant="text" color="textSecondary">
+                  No results found
+                </Typography>
+              ) : (
+                data
+                  .filter((data) =>
+                    data.name.toLowerCase().includes(searchQuery)
+                  )
+                  .map((data, index) => (
+                    <Row key={index} data={data} classroomDetails={resp} />
+                  ))
+              )}
+            </TableBody>
+          )}
         </Table>
       </TableContainer>
     </React.Fragment>

@@ -54,13 +54,13 @@ const Analytics = () => {
         //136844541806
         setResp(response.data);
         setStudentsData(response.data.StudentsData);
+
         setIsLoading(false);
       } catch (e) {
         const res1 = await axios.get(
           `/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
         );
         if (res1.data.status === 200) {
-          console.log("class created shyd");
           setTimeout(() => {
             // history.push(
             //   `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
@@ -125,60 +125,61 @@ const Analytics = () => {
           <FileUploader courseId={courseId} resp={resp} />
         )}
         {/* <FileUploader courseId={(courseId, resp)} /> */}
-        <Grid
-          style={{ marginTop: "40px", marginBottom: "40px" }}
-          container
-          spacing={2}
-        >
-          <Grid item lg={3} md={6} sm={12}>
-            <Box
-              style={{ borderLeft: `3px solid ${orange[500]}` }}
-              className={classes.cards}
-            >
-              {!isLoading ? (
-                <DetailCards
-                  name={"Total Time"}
-                  data={
-                    resp.totalDuration > 180
-                      ? `${parseInt(resp.totalDuration / 60)}hrs ${parseInt(
-                          resp.totalDuration % 60
-                        )}mins`
-                      : `${parseInt(resp.totalDuration)}mins`
-                  }
-                />
-              ) : (
-                <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
-              )}
-            </Box>
+        <Box style={{ marginTop: "40px", marginBottom: "40px" }}>
+          <Grid container spacing={2}>
+            <Grid item lg={3} md={6} sm={12}>
+              <Box
+                style={{ borderLeft: `3px solid ${orange[500]}` }}
+                className={classes.cards}
+              >
+                {!isLoading ? (
+                  <DetailCards
+                    name={"Total Time"}
+                    data={
+                      resp.totalDuration > 180
+                        ? `${parseInt(resp.totalDuration / 60)}hrs ${parseInt(
+                            resp.totalDuration % 60
+                          )}mins`
+                        : `${parseInt(resp.totalDuration)}mins`
+                    }
+                  />
+                ) : (
+                  <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+                )}
+              </Box>
+            </Grid>
+            <Grid item lg={3} md={6} sm={12}>
+              <Box
+                style={{ borderLeft: `3px solid ${blue[500]}`}}
+                className={classes.cards}
+              >
+                {!isLoading ? (
+                  <DetailCards
+                    name={"Students Enrolled"}
+                    data={resp.StudentsData.length}
+                  />
+                ) : (
+                  <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+                )}
+              </Box>
+            </Grid>
+            <Grid item lg={3} md={6} sm={12}>
+              <Box
+                style={{ borderLeft: `3px solid ${amber[500]}`}}
+                className={classes.cards}
+              >
+                {!isLoading ? (
+                  <DetailCards
+                    name={"Total Classes"}
+                    data={resp.totalClasses}
+                  />
+                ) : (
+                  <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
+                )}
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item lg={3} md={6}>
-            <Box
-              style={{ borderLeft: `3px solid ${blue[500]}` }}
-              className={classes.cards}
-            >
-              {!isLoading ? (
-                <DetailCards
-                  name={"Students Enrolled"}
-                  data={resp.StudentsData.length}
-                />
-              ) : (
-                <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
-              )}
-            </Box>
-          </Grid>
-          <Grid item lg={3} md={6}>
-            <Box
-              style={{ borderLeft: `3px solid ${amber[500]}` }}
-              className={classes.cards}
-            >
-              {!isLoading ? (
-                <DetailCards name={"Total Classes"} data={resp.totalClasses} />
-              ) : (
-                <TailSpin heigth="35" width="35" color="rgb(33, 150, 243)" />
-              )}
-            </Box>
-          </Grid>
-        </Grid>
+        </Box>
 
         {/* .................................................................................................... */}
 

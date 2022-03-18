@@ -55,14 +55,14 @@ const ClassroomCard = ({ item, color }) => {
       </CardContent> */}
       <Box style={{ marginTop: "100px", display: "flex", padding: "10px" }}>
         <Box style={{ flexGrow: "1" }}>
-          <Button
+          {/* <Button
             style={{ marginRight: "10px" }}
             variant="contained"
             color="primary"
             onClick={func}
           >
             Click Me
-          </Button>
+          </Button> */}
           <Button
             // style={{ margin: "10px" }}
             variant="contained"

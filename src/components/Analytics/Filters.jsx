@@ -65,6 +65,17 @@ export const Filters = (props) => {
           : -1
       );
       props.onChange(sortedData, searchQuery);
+    } else if (value === "overallScore") {
+      const sortedData = props.studentsData.sort((a, b) =>
+        a.overallScore < b.overallScore
+          ? 1
+          : a.overallScore === b.overallScore
+          ? a.size > b.size
+            ? 1
+            : -1
+          : -1
+      );
+      props.onChange(sortedData, searchQuery);
     }
   };
 
@@ -157,6 +168,7 @@ export const Filters = (props) => {
                   <em>None</em>
                 </MenuItem>
                 <MenuItem value={"name"}>Name</MenuItem>
+                <MenuItem value={"overallScore"}>Overall Score</MenuItem>
                 <MenuItem value={"attendance"}>Attendance</MenuItem>
                 <MenuItem value={"mins_watched"}>Time Watched</MenuItem>
                 <MenuItem value={"comments"}>Chat Score</MenuItem>
