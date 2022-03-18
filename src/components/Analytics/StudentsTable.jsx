@@ -84,7 +84,7 @@ function Row({ data, classroomDetails }) {
 
 export default function CollapsibleTable({ resp, studentsData }) {
   // const data = studentsData;
-  console.log(resp);
+  //console.log(resp);
 
   const [data, setData] = React.useState(studentsData);
   const [searchQuery, setSearchQuery] = React.useState("");

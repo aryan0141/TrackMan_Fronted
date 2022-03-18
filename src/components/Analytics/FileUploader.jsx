@@ -10,7 +10,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 // import {ProgressBar} from 'react-bootstrap';
 
 const FileUploader = ({ courseId, resp }) => {
-  console.log(resp.courseId);
+  //console.log(resp);
   const [file, setFile] = useState(null);
   const [uploadBtnDisabled, setUploadBtnDisabled] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
@@ -36,20 +36,30 @@ const FileUploader = ({ courseId, resp }) => {
       return;
     }
     //console.log(file);
-    // if(extension==="csv"){
-    //   //const filename2 = arr[0];
-    //   const st1 = fileName1.split(" - Attendance Report.csv");
-    //   const st2 = st1[0];
-    //   const st3 = st2.substring(17, st2.length);
-    //   console.log(st3);
-    //   if(!fileNames.includes(st3)){
-    //     alert("FileName not allowed for this class");
-    //     return;
-    //   }else{
+    if (resp.uploadNames){
+      for(let x = 0 ; x<resp.uploadNames.length ; x++){
+        if(resp.uploadNames[x].filename === fileName1){
+                alert("File already uploaded");
+                return;
+        }
+      }
 
-    //   }
-    // }
-    setUploadBtnDisabled(true);
+    }
+    
+      // if(extension==="csv"){
+      //   //const filename2 = arr[0];
+      //   const st1 = fileName1.split(" - Attendance Report.csv");
+      //   const st2 = st1[0];
+      //   const st3 = st2.substring(17, st2.length);
+      //   console.log(st3);
+      //   if(!fileNames.includes(st3)){
+      //     alert("FileName not allowed for this class");
+      //     return;
+      //   }else{
+
+      //   }
+      // }
+      setUploadBtnDisabled(true);
     e.preventDefault();
 
     const data = new FormData();

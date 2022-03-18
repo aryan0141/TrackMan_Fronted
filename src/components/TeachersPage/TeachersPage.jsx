@@ -4,7 +4,7 @@ import axios from "axios";
 import { userContext } from "../../userContext";
 import ClassroomCard from "./card";
 import Navbar from "../Navbar";
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
 
@@ -32,13 +32,13 @@ const TeachersPage = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(`/api/users/courseList/${user.email}`);
+        //console.log(response, "HERE");
         if (response.data.status === 400) {
           console.log("error occured  ");
           setPermission(true);
-        }
-        else{
-        setResp(response.data);
-        setIsLoading(false);
+        } else {
+          setResp(response.data);
+          setIsLoading(false);
         }
       } catch (e) {
         // setPermission(true);
@@ -52,7 +52,7 @@ const TeachersPage = () => {
     getItems();
   }, [user]);
 
-  console.log(resp);
+  //console.log(resp);
 
   return (
     <React.Fragment>
@@ -60,17 +60,32 @@ const TeachersPage = () => {
       <Box style={{ margin: "30px" }}>
         <Grid container spacing={2}>
           {!isLoading ? (
-            resp.courses.map((item) => (
-              <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
-                <ClassroomCard item={item} />
-              </Grid>
-            ))
+            // resp.courses.length && resp.courses.map((item) => (
+            //   <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
+            //     <ClassroomCard item={item} />
+            //   </Grid>))
+            resp.courses && resp.courses.length ? (
+              resp.courses.map((item) => (
+                <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
+                  <ClassroomCard item={item} />
+                </Grid>
+              ))
+            ) : (
+              <Alert severity="info" style={{ width: "100%" }}>
+                No classes found!!
+              </Alert>
+            )
           ) : (
             <p>Loading</p>
           )}
         </Grid>
         <Grid container spacing={2}>
-          { permission && <p>No permission , Try login again and make sure ticking the permissions required</p>}
+          {permission && (
+            <p>
+              No permission , Try login again and make sure ticking the
+              permissions required
+            </p>
+          )}
         </Grid>
       </Box>
     </React.Fragment>
