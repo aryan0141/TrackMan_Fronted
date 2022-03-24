@@ -20,12 +20,16 @@ const FileUploader = ({ courseId, resp }) => {
   };
 
   const history = useHistory();
-
   const onSubmit = (e) => {
     if (file == null) {
       alert("Select a file first");
       return;
     }
+
+    // if(fileNames.includes(file)) {
+    //   alert("You cannot upload the same file again, first delete it than upload it again.");
+    //   return;
+    // }
 
     const fileName1 = file.name;
     var arr = fileName1.split(".");
@@ -78,7 +82,7 @@ const FileUploader = ({ courseId, resp }) => {
     };
 
     axios.post("/api/uploadDoc/upload", data, options).then(async (res) => {
-      console.log(res, "INSIDE");
+      // console.log(res, "INSIDE");
 
       //console.log(res.data.originalname);
 
