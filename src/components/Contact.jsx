@@ -23,7 +23,7 @@ const Contact = () => {
         <br />
         <Typography variant="h6">Name: Ayush Shukla</Typography>
         <Typography variant="h6">Email: shukla.8@iitj.ac.in</Typography>
-        <Typography variant="h6">Contact: 8765432037</Typography>
+        {/* <Typography variant="h6">Contact: 8765432037</Typography> */}
       </div>
     </Fragment>
   );

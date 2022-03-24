@@ -81,10 +81,13 @@ const TeachersPage = () => {
         </Grid>
         <Grid container spacing={2}>
           {permission && (
-            <p>
-              No permission , Try login again and make sure ticking the
-              permissions required
-            </p>
+            <Alert severity="info" style={{ width: "100%" }}>
+                Permission not given , Try Login again with proper permissions !!
+            </Alert>
+            // <p>
+            //   No permission , Try login again and make sure ticking the
+            //   permissions required
+            // </p>
           )}
         </Grid>
       </Box>

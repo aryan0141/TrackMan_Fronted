@@ -63,7 +63,12 @@ const ResponsiveAppBar = () => {
 
   const handleClassrooms = () => {
       history.push("/teachersPage");
-    };
+  };
+ 
+  const handleReadme = () => {
+    window.open("https:docs.google.com/document/d/1lJGmCxGPvLcItC7d0IOEaFkN2y_2NCEwAUo3Xv51lEc/edit?usp=sharing");
+    history.push("/teachersPage");
+  };
 
   const { user, setUser } = useContext(userContext);
   //const geeks = "https://www.w3schools.com/images/w3schools_green.jpg";
@@ -156,6 +161,13 @@ const ResponsiveAppBar = () => {
               sx={{ my: 2, color: "white", display: "block" }}
             >
               Contacts
+            </Button>
+            <Button
+              key="Readme"
+              onClick={handleReadme}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Readme
             </Button>
           </Box>
 
