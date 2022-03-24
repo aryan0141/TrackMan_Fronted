@@ -13,11 +13,7 @@ import {
 import React, { useState, useEffect } from "react";
 import Home from "./components/HomePage/home";
 import TeachersPage from "./components/TeachersPage/TeachersPage";
-<<<<<<< HEAD
-import Analytics from './components/Analytics/Analytics';
-=======
 import Analytics from "./components/Analytics/Analytics";
->>>>>>> upstream/master
 import Contact from "./components/Contact.jsx";
 import { userContext } from "./userContext";
 import { blue, red } from "@mui/material/colors";

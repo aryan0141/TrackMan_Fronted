@@ -44,7 +44,6 @@ const Analytics = () => {
   const [studentsData, setStudentsData] = useState([]);
 
   useEffect(() => {
-<<<<<<< HEAD
     const getItems = async () => {
       try {
         setIsLoading(true);
@@ -74,12 +73,10 @@ const Analytics = () => {
         //console.log("error occured here ", e);
       }
     };
-=======
     if (!Cookies.get("userInfo")) {
       history.push("/");
       return;
     }
->>>>>>> upstream/master
 
     if (user && user.email) {
       const getItems = async () => {

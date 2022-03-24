@@ -26,10 +26,10 @@ const FileUploader = ({ courseId, resp }) => {
       return;
     }
 
-    if(fileNames.includes(file)) {
-      alert("You cannot upload the same file again, first delete it than upload it again.");
-      return;
-    }
+    // if(fileNames.includes(file)) {
+    //   alert("You cannot upload the same file again, first delete it than upload it again.");
+    //   return;
+    // }
 
     const fileName1 = file.name;
     var arr = fileName1.split(".");
@@ -81,12 +81,8 @@ const FileUploader = ({ courseId, resp }) => {
       },
     };
 
-<<<<<<< HEAD
-    axios.post("/api/uploadDoc/upload", data, options).then((res) => {
-=======
     axios.post("/api/uploadDoc/upload", data, options).then(async (res) => {
-      console.log(res, "INSIDE");
->>>>>>> upstream/master
+      // console.log(res, "INSIDE");
 
       //console.log(res.data.originalname);
 
