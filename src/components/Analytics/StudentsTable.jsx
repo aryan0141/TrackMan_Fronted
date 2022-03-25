@@ -69,16 +69,18 @@ export default function CollapsibleTable({ resp, studentsData }) {
   const [wait, setWait] = React.useState(true);
   React.useEffect(() => {
     var maxComment = 0;
+    var maxTimeWatched = 0;
     for (var i = 0; i < data.length; i++) {
       maxComment = Math.max(maxComment, data[i].comments)
+      maxTimeWatched = Math.max(maxTimeWatched, data[i].duration)
       // totalChats += data[i].comments;
     }
     data.forEach((object) => {
       const normalizedAttendance = resp.totalClasses
         ? object.classesAttended / resp.totalClasses
         : 0;
-      const normalizedTime = resp.totalDuration
-        ? object.duration / resp.totalDuration
+      const normalizedTime = maxTimeWatched
+        ? object.duration / maxTimeWatched
         : 0;
       const normalizedChats = maxComment ? object.comments / maxComment : 0;
       const overallScore = (
