@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { userContext } from "../../userContext";
 import FileUploader from "./FileUploader";
-import Navbar from "../Navbar";
+import Navbar from "../navbar";
 import StudentsTable from "./StudentsTable";
 import { useHistory } from "react-router-dom";
 import Typography from "@mui/material/Typography";

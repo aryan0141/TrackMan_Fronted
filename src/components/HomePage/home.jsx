@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import Navbar from '../Navbar';
+import Navbar from '../navbar';
 import Intro from './Intro';
 import styled from 'styled-components';
 import { Footer } from "../Footer";

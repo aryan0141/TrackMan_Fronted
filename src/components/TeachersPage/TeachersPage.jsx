@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { userContext } from "../../userContext";
 import ClassroomCard from "./card";
-import Navbar from "../Navbar";
+import Navbar from "../navbar";
 import { Container, Grid, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
