@@ -57,7 +57,7 @@ const Intro = () => {
   const responseGoogle = (response) => {
     const { code } = response;
     axios
-      .post(`${BACKEND_HOST_URL}/api/users/create-tokens`, { code })
+      .post(`/api/api/users/create-tokens`, { code })
       .then((response) => {
         // console.log(response.data);
         Cookies.set("userInfo", response.data.access_token, {
