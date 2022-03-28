@@ -7,6 +7,7 @@ import "./style.css";
 import { Box } from "@mui/system";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import LinearProgress from "@mui/material/LinearProgress";
+import { BACKEND_HOST_URL } from "../../config/default";
 // import {ProgressBar} from 'react-bootstrap';
 
 const FileUploader = ({ courseId, resp }) => {
@@ -40,30 +41,29 @@ const FileUploader = ({ courseId, resp }) => {
       return;
     }
     //console.log(file);
-    if (resp.uploadNames){
-      for(let x = 0 ; x<resp.uploadNames.length ; x++){
-        if(resp.uploadNames[x].filename === fileName1){
-                alert("File already uploaded");
-                return;
+    if (resp.uploadNames) {
+      for (let x = 0; x < resp.uploadNames.length; x++) {
+        if (resp.uploadNames[x].filename === fileName1) {
+          alert("File already uploaded");
+          return;
         }
       }
-
     }
-    
-      // if(extension==="csv"){
-      //   //const filename2 = arr[0];
-      //   const st1 = fileName1.split(" - Attendance Report.csv");
-      //   const st2 = st1[0];
-      //   const st3 = st2.substring(17, st2.length);
-      //   console.log(st3);
-      //   if(!fileNames.includes(st3)){
-      //     alert("FileName not allowed for this class");
-      //     return;
-      //   }else{
 
-      //   }
-      // }
-      setUploadBtnDisabled(true);
+    // if(extension==="csv"){
+    //   //const filename2 = arr[0];
+    //   const st1 = fileName1.split(" - Attendance Report.csv");
+    //   const st2 = st1[0];
+    //   const st3 = st2.substring(17, st2.length);
+    //   console.log(st3);
+    //   if(!fileNames.includes(st3)){
+    //     alert("FileName not allowed for this class");
+    //     return;
+    //   }else{
+
+    //   }
+    // }
+    setUploadBtnDisabled(true);
     e.preventDefault();
 
     const data = new FormData();
@@ -81,52 +81,57 @@ const FileUploader = ({ courseId, resp }) => {
       },
     };
 
-    axios.post("/api/uploadDoc/upload", data, options).then(async (res) => {
-      // console.log(res, "INSIDE");
+    axios
+      .post(`${BACKEND_HOST_URL}/api/uploadDoc/upload`, data, options)
+      .then(async (res) => {
+        // console.log(res, "INSIDE");
 
-      //console.log(res.data.originalname);
+        //console.log(res.data.originalname);
 
-      // const fileName = String(res.data.originalname);
-      //console.log(fileName);
-      // var fileName = req.files.upload.name;
+        // const fileName = String(res.data.originalname);
+        //console.log(fileName);
+        // var fileName = req.files.upload.name;
 
-      // axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
-      //     console.log("Ok printed");
-      //     history.push(`/analytics/${courseId}`);
+        // axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
+        //     console.log("Ok printed");
+        //     history.push(`/analytics/${courseId}`);
 
-      // }).catch((e)=>{
-      //     console.log("error" , e)
-      // })
+        // }).catch((e)=>{
+        //     console.log("error" , e)
+        // })
 
-      const fileName22 = {
-        fileName: String(res.data.originalname),
-        courseId22: resp.courseId,
-      };
+        const fileName22 = {
+          fileName: String(res.data.originalname),
+          courseId22: resp.courseId,
+        };
 
-      const res12 = await axios.post(`/api/uploadDoc/addClass`, { fileName22 });
-      console.log(res12);
-
-      if (res12.data.status === 200) {
+        const res12 = await axios.post(
+          `${BACKEND_HOST_URL}/api/uploadDoc/addClass`,
+          { fileName22 }
+        );
         console.log(res12);
-        // history.go(0);
-        setTimeout(() => {
-          history.go(0);
-        }, 1000);
-      } else if (res12.data.status === 400) {
-        alert("Error with filename or class's name");
-        setTimeout(() => {
-          history.go(0);
-        }, 1000);
-      }
-      console.log("Success");
 
-      setUploadPercentage(100);
-      setTimeout(() => {
-        setUploadPercentage(0);
-        setUploadBtnDisabled(false);
-        setFile(null);
-      }, 1000);
-    });
+        if (res12.data.status === 200) {
+          console.log(res12);
+          // history.go(0);
+          setTimeout(() => {
+            history.go(0);
+          }, 1000);
+        } else if (res12.data.status === 400) {
+          alert("Error with filename or class's name");
+          setTimeout(() => {
+            history.go(0);
+          }, 1000);
+        }
+        console.log("Success");
+
+        setUploadPercentage(100);
+        setTimeout(() => {
+          setUploadPercentage(0);
+          setUploadBtnDisabled(false);
+          setFile(null);
+        }, 1000);
+      });
   };
   return (
     <Container

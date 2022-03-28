@@ -14,13 +14,14 @@ import { userContext } from "../../userContext";
 import styled from "styled-components";
 import { Box } from "@mui/system";
 import { amber, blue, green, orange, purple, teal, yellow } from "@mui/material/colors";
+import { BACKEND_HOST_URL } from "../../config/default";
 
 const ClassroomCard = ({ item, color }) => {
   const { user, setUser } = useContext(userContext);
 
   const func = () => {
     axios.get(
-      `/api/users/createCompleteClass/${user.email}/${item.id}/${item.name}/${user.access_token}`
+      `${BACKEND_HOST_URL}/api/users/createCompleteClass/${user.email}/${item.id}/${item.name}/${user.access_token}`
     );
   };
 

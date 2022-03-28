@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 import { TailSpin } from "react-loader-spinner";
 import axios from "axios";
 import { useAlert } from 'react-alert'
+import { BACKEND_HOST_URL } from "../../config/default";
 
 export const ClassWeightage = ({ classData, loader }) => {
   const [time, setTime] = React.useState(classData.weightAge[0]);
@@ -47,7 +48,7 @@ export const ClassWeightage = ({ classData, loader }) => {
     };
 
     
-    const resp = await axios.post(`/api/fileNames/updateWeightageArr`, {
+    const resp = await axios.post(`${BACKEND_HOST_URL}/api/fileNames/updateWeightageArr`, {
       weightAgeDoc,
     });
     if (resp.data.status === 200) {

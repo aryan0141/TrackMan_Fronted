@@ -9,6 +9,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { Box } from "@mui/system";
 import Cookies from "js-cookie";
+import { BACKEND_HOST_URL } from "../../config/default";
 
 const useStyles = makeStyles({
   vertiHoriCenter: {
@@ -56,7 +57,7 @@ const Intro = () => {
   const responseGoogle = (response) => {
     const { code } = response;
     axios
-      .post("/api/users/create-tokens", { code })
+      .post(`${BACKEND_HOST_URL}/api/users/create-tokens`, { code })
       .then((response) => {
         // console.log(response.data);
         Cookies.set("userInfo", response.data.access_token, {

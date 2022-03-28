@@ -10,16 +10,17 @@ import { Box } from "@mui/system";
 import { TailSpin } from "react-loader-spinner";
 import { ClassWeightage } from "./ClassWeightage";
 import { blue, green, orange, yellow } from "@mui/material/colors";
-import { useAlert } from 'react-alert'
+import { useAlert } from "react-alert";
+import { BACKEND_HOST_URL } from "../../config/default";
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
 const ClassroomNames = ({ data, loading }) => {
-  const alert = useAlert()
+  const alert = useAlert();
   var a1 = ``;
-  
+
   const history = useHistory();
 
   const [nameData, setNameData] = React.useState(null);
@@ -44,21 +45,21 @@ const ClassroomNames = ({ data, loading }) => {
   const handleFilesDelete = (fileData) => async () => {
     if (fileData.FileType === "csv") {
       const res = await axios.get(
-        `http://localhost:3000/api/uploadDoc/deleteEveryClass/${data.courseId}/${fileData.fileId}`
+        `${BACKEND_HOST_URL}/api/uploadDoc/deleteEveryClass/${data.courseId}/${fileData.fileId}`
       );
 
       if (res.data.status === 200) {
         history.go(0);
-        alert.success('Deleted Successfully');
+        alert.success("Deleted Successfully");
       }
     } else if (fileData.FileType === "sbv") {
       const res = await axios.get(
-        `http://localhost:3000/api/uploadDoc/deleteEveryClassSbv/${data.courseId}/${fileData.fileId}`
+        `${BACKEND_HOST_URL}/api/uploadDoc/deleteEveryClassSbv/${data.courseId}/${fileData.fileId}`
       );
 
       if (res.data.status === 200) {
         history.go(0);
-        alert.success('Deleted Successfully');
+        alert.success("Deleted Successfully");
       }
     }
   };
@@ -66,7 +67,7 @@ const ClassroomNames = ({ data, loading }) => {
   const handleDelete = (nameToDelete) => async () => {
     try {
       if (nameData.length <= 1) {
-        alert.error("You must have atleast one name")
+        alert.error("You must have atleast one name");
         return;
       }
 
@@ -78,14 +79,14 @@ const ClassroomNames = ({ data, loading }) => {
       };
       console.log(filename);
       const res = await axios.post(
-        `http://localhost:3000/api/fileNames/deleteFileName`,
+        `${BACKEND_HOST_URL}/api/fileNames/deleteFileName`,
         { filename }
       );
       if (res.data.status === 400) {
         alert.error(res.data.msg);
       } else if (res.data.status === 200) {
         setNameData((name) => name.filter((name) => name !== nameToDelete));
-        alert.success('Deleted Successfully');
+        alert.success("Deleted Successfully");
         // history.go(0);
         //setNameData([...nameData,name]);
       }
@@ -108,7 +109,7 @@ const ClassroomNames = ({ data, loading }) => {
     try {
       console.log(cuttOffMin1);
       const res = await axios.post(
-        `http://localhost:3000/api/fileNames/updateCuttOffMin`,
+        `${BACKEND_HOST_URL}/api/fileNames/updateCuttOffMin`,
         { cuttOffMin1 }
       );
       if (res.data.status === 400) {
@@ -143,7 +144,7 @@ const ClassroomNames = ({ data, loading }) => {
       //nameData.push(name);
 
       const res = await axios.post(
-        `http://localhost:3000/api/fileNames/addFileName`,
+        `${BACKEND_HOST_URL}/api/fileNames/addFileName`,
         { filename }
       );
       console.log(res);
@@ -249,7 +250,17 @@ const ClassroomNames = ({ data, loading }) => {
           </Paper>
         </Box>
 
-        <hr style={{ width: "15%", textAlign: "left", marginLeft: "0px", height:"3px", borderRadius: "6px", border: "none", backgroundColor: blue[500] }} />
+        <hr
+          style={{
+            width: "15%",
+            textAlign: "left",
+            marginLeft: "0px",
+            height: "3px",
+            borderRadius: "6px",
+            border: "none",
+            backgroundColor: blue[500],
+          }}
+        />
 
         {/* Cutt off time */}
         <Box
@@ -301,7 +312,17 @@ const ClassroomNames = ({ data, loading }) => {
           )}
         </Box>
 
-        <hr style={{ width: "15%", textAlign: "left", marginLeft: "0px", height:"3px", borderRadius: "6px", border: "none", backgroundColor: blue[500] }} />
+        <hr
+          style={{
+            width: "15%",
+            textAlign: "left",
+            marginLeft: "0px",
+            height: "3px",
+            borderRadius: "6px",
+            border: "none",
+            backgroundColor: blue[500],
+          }}
+        />
 
         {/* Class Parameters Weightage */}
         <Box
@@ -316,7 +337,17 @@ const ClassroomNames = ({ data, loading }) => {
           )}
         </Box>
 
-        <hr style={{ width: "15%", textAlign: "left", marginLeft: "0px", height:"3px", borderRadius: "6px", border: "none", backgroundColor: blue[500] }} />
+        <hr
+          style={{
+            width: "15%",
+            textAlign: "left",
+            marginLeft: "0px",
+            height: "3px",
+            borderRadius: "6px",
+            border: "none",
+            backgroundColor: blue[500],
+          }}
+        />
 
         {/* Names of uploaded files */}
         <Box

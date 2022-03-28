@@ -7,6 +7,7 @@ import Navbar from "../navbar";
 import { Container, Grid, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
+import { BACKEND_HOST_URL } from "../../config/default";
 
 // const load = async (email) => {
 //   const resp = await axios.get(`/api/users/courseList/${email}`);
@@ -31,7 +32,7 @@ const TeachersPage = () => {
     const getItems = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`/api/users/courseList/${user.email}`);
+        const response = await axios.get(`${BACKEND_HOST_URL}/api/users/courseList/${user.email}`);
         //console.log(response, "HERE");
         if (response.data.status === 400) {
           console.log("error occured  ");

@@ -17,6 +17,7 @@ import ClassroomNames from "./ClassroomSettings";
 import { TailSpin } from "react-loader-spinner";
 import { makeStyles } from "@material-ui/core";
 import Cookies from "js-cookie";
+import { BACKEND_HOST_URL } from "../../config/default";
 
 const useStyles = makeStyles({
   vertiHoriCenter: {
@@ -49,7 +50,7 @@ const Analytics = () => {
         setIsLoading(true);
         const response = await axios.get(
           // `/api/teachers/teachersClass/${courseId}`
-          `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+          `${BACKEND_HOST_URL}/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
           //`/api/teachers/teachersClass/136844541806`
         );
         // console.log(response)
@@ -60,7 +61,7 @@ const Analytics = () => {
         setIsLoading(false);
       } catch (e) {
         const res1 = await axios.get(
-          `/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
+          `${BACKEND_HOST_URL}/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
         );
         if (res1.data.status === 200) {
           setTimeout(() => {
@@ -84,7 +85,7 @@ const Analytics = () => {
           setIsLoading(true);
           const response = await axios.get(
             // `/api/teachers/teachersClass/${courseId}`
-            `/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+            `${BACKEND_HOST_URL}/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
             //`/api/teachers/teachersClass/136844541806`
           );
           // console.log(response)
@@ -94,7 +95,7 @@ const Analytics = () => {
           setIsLoading(false);
         } catch (e) {
           const res1 = await axios.get(
-            `/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
+            `${BACKEND_HOST_URL}/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
           );
           if (res1.data.status === 200) {
             console.log("class created shyd");
