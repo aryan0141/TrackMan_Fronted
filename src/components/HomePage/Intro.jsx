@@ -10,6 +10,8 @@ import { makeStyles } from "@material-ui/core";
 import { Box } from "@mui/system";
 import Cookies from "js-cookie";
 import { BACKEND_HOST_URL } from "../../config/default";
+import Login from "./login";
+import Signup from "./signup";
 
 const useStyles = makeStyles({
   vertiHoriCenter: {
@@ -108,7 +110,7 @@ const Intro = () => {
           md={6}
           sm={12}
           className={classes.vertiHoriCenter}
-          style={{ height: "84vh" }}
+          // style={{ height: "84vh" }}
         >
           <Box
             sx={{
@@ -130,20 +132,15 @@ const Intro = () => {
               A complete application to get a track of your students.
             </Typography>
             <br />
-            <GoogleLogin
-              clientId="821931130263-d6pvkrhi1tjmcrmk2tdcbhp9mpgq3sqn.apps.googleusercontent.com"
-              buttonText="Continue with Google"
-              onSuccess={responseGoogle}
-              onFailure={responseError}
-              cookiePolicy={"single_host_origin"}
-              responseType="code"
-              accessType="offline"
-              prompt="select_account"
-              scope="openid email profile https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.profile.emails"
-              //prompt='consent'
-              //
-              //approval_prompt='force'
-            />
+            <Box>
+              <Button variant="contained" color="primary" style={{marginRight: "5px"}}>
+                Login
+              </Button>
+              <Button variant="contained" color="primary">
+                Signup
+              </Button>
+            </Box>
+            {/* <Signup /> */}
           </Box>
         </Grid>
         <Grid item lg={6} md={6} sm={12}>

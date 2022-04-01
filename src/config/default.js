@@ -1,1 +1,1 @@
-export const BACKEND_HOST_URL="https://www.datasciencebloggers.com";
+export const BACKEND_HOST_URL="http://localhost:5000";
