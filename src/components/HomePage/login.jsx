@@ -10,8 +10,16 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Button, Container, Grid } from "@mui/material";
 import { useAlert } from "react-alert";
+import Cookies from "js-cookie";
+
+import axios from "axios";
+import { BACKEND_HOST_URL } from "../../config/default";
+import { useContext } from "react";
+import { userContext } from "../../userContext";
 
 const Login = () => {
+  const { user, setUser } = useContext(userContext);
+
   const alert = useAlert();
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
@@ -29,8 +37,8 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const handleSubmit = () => {
-    if (email.includes("iitj.ac.in") === false) {
+  const handleSubmit = async () => {
+    if (!email.includes("iitj.ac.in")) {
       setEmailError(true);
       alert.error("Only IITJ Emails are allowed");
       return;
@@ -38,7 +46,7 @@ const Login = () => {
       setEmailError(false);
     }
 
-    if (password == "") {
+    if (password === "") {
       setPasswordError(true);
       return;
     } else {
@@ -46,6 +54,21 @@ const Login = () => {
     }
 
     console.log("Submitted Succesfully");
+    // Login Process
+    try {
+      const data = {
+        email,
+        password,
+      };
+      const res = await axios.post(`${BACKEND_HOST_URL}/auth/v2/login`, data);
+      Cookies.set("userInfo", JSON.stringify(res.data), {
+        expires: 1,
+        path: "/",
+      });
+      setUser(res.data);
+    } catch (err) {
+      alert.error(err.response.data.err);
+    }
   };
   return (
     <React.Fragment>

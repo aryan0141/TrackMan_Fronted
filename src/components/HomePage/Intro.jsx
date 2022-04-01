@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import img1 from "./../../img/homepageImg.jpg";
@@ -55,6 +55,8 @@ const Intro = () => {
     history.push("/teachersPage");
     /* window.location.href="/teachersPage"; */
   };
+
+  const [loginSignUp, setLoginSignUp] = useState("signup");
 
   const responseGoogle = (response) => {
     const { code } = response;
@@ -133,14 +135,24 @@ const Intro = () => {
             </Typography>
             <br />
             <Box>
-              <Button variant="contained" color="primary" style={{marginRight: "5px"}}>
+              <Button
+                onClick={() => setLoginSignUp("login")}
+                variant="contained"
+                color="primary"
+                style={{ marginRight: "5px" }}
+              >
                 Login
               </Button>
-              <Button variant="contained" color="primary">
+              <Button
+                onClick={() => setLoginSignUp("signup")}
+                variant="contained"
+                color="primary"
+              >
                 Signup
               </Button>
             </Box>
-            {/* <Signup /> */}
+            <br />
+            {loginSignUp === "login" ? <Login /> : <Signup />}
           </Box>
         </Grid>
         <Grid item lg={6} md={6} sm={12}>

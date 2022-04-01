@@ -47,12 +47,12 @@ const ResponsiveAppBar = () => {
       console.log("a");
      Cookies.remove("userInfo");
      console.log("b");
-     setTimeout(() => {
+    //  setTimeout(() => {
        //history.go(0);
        history.push("/");
        history.go(0);
        console.log("Hello, World!");
-     }, 1000);
+    //  }, 1000);
       // history.push("/");
       // console.log("c");
     };

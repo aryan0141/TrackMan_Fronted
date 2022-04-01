@@ -54,21 +54,23 @@ function App() {
     const userInfo = Cookies.get("userInfo");
     //const resp = await
     if (userInfo) {
-      axios
-        .get(
-          `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${userInfo}`
-        )
-        .then((resp) => {
-          const currUser = {
-            name: resp.data.name,
-            firstName: resp.data.given_name,
-            lastName: resp.data.family_name,
-            email: resp.data.email,
-            picture: resp.data.picture,
-            access_token: userInfo,
-          };
-          setUser(currUser);
-        });
+      // axios
+      //   .get(
+      //     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${userInfo}`
+      //   )
+      //   .then((resp) => {
+      //     const currUser = {
+      //       name: resp.data.name,
+      //       firstName: resp.data.given_name,
+      //       lastName: resp.data.family_name,
+      //       email: resp.data.email,
+      //       picture: resp.data.picture,
+      //       access_token: userInfo,
+      //     };
+      //     setUser(currUser);
+      //   });
+      setUser(JSON.parse(userInfo));
+      
     } else {
       Cookies.remove("userInfo");
       setUser(null);
