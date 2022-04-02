@@ -27,6 +27,7 @@ import Cookies from "js-cookie";
 import { Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import NotFound from "./components/NotFound";
+import EmailVerify from "./components/HomePage/emailVerify";
 
 const theme = createTheme({
   palette: {
@@ -70,7 +71,7 @@ function App() {
       //     setUser(currUser);
       //   });
       setUser(JSON.parse(userInfo));
-      
+      // console.log(JSON.parse(userInfo).token);
     } else {
       Cookies.remove("userInfo");
       setUser(null);
@@ -104,6 +105,7 @@ function App() {
                 <Route path="/analytics/:courseId/:courseName">
                   <Analytics />
                 </Route>
+                <Route path="/auth/activate/:token" component={EmailVerify} />
                 {/* ) : ( */}
                 {/* <Redirect to="/" /> */}
                 {/* )} */}
