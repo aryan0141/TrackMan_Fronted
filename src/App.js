@@ -70,7 +70,9 @@ function App() {
       //     };
       //     setUser(currUser);
       //   });
+      // console.log(JSON.parse(userInfo));
       setUser(JSON.parse(userInfo));
+      // console.log(user);
       // console.log(JSON.parse(userInfo).token);
     } else {
       Cookies.remove("userInfo");
@@ -102,7 +104,7 @@ function App() {
                 {/* <Redirect to="/" /> */}
                 {/* )} */}
                 {/* {user && user.email ? ( */}
-                <Route path="/analytics/:courseId/:courseName">
+                <Route path="/analytics/:courseName">
                   <Analytics />
                 </Route>
                 <Route path="/auth/activate/:token" component={EmailVerify} />

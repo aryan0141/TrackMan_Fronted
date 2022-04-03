@@ -37,31 +37,49 @@ const Analytics = () => {
   // const navigate=useNavigate()
   const history = useHistory();
   const classes = useStyles();
-  const { courseId } = useParams();
+  // const { courseId } = useParams();
   const { courseName } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const { user, setUser } = useContext(userContext);
+  console.log(user);
   const [resp, setResp] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
 
   useEffect(() => {
+    if (!Cookies.get("userInfo")) {
+      history.push("/");
+      return;
+    }
+
+    const userInfo = Cookies.get("userInfo");
+    const token = JSON.parse(userInfo).token;
+    const config = { headers: { Authorization: token } };
+
     const getItems = async () => {
       try {
         setIsLoading(true);
+
         const response = await axios.get(
           // `/api/teachers/teachersClass/${courseId}`
-          `${BACKEND_HOST_URL}/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+
+          // `${BACKEND_HOST_URL}/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+
+          `${BACKEND_HOST_URL}/api/getClass/${courseName}`,
+          config
           //`/api/teachers/teachersClass/136844541806`
         );
         // console.log(response)
         //136844541806
+        console.log(response.data);
+        return;
         setResp(response.data);
         setStudentsData(response.data.StudentsData);
 
         setIsLoading(false);
       } catch (e) {
         const res1 = await axios.get(
-          `${BACKEND_HOST_URL}/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
+          `${BACKEND_HOST_URL}/api/getClass/${courseName}`
+          //`${BACKEND_HOST_URL}/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
         );
         if (res1.data.status === 200) {
           setTimeout(() => {
@@ -74,18 +92,14 @@ const Analytics = () => {
         //console.log("error occured here ", e);
       }
     };
-    if (!Cookies.get("userInfo")) {
-      history.push("/");
-      return;
-    }
 
     if (user && user.email) {
       const getItems = async () => {
         try {
           setIsLoading(true);
           const response = await axios.get(
-            // `/api/teachers/teachersClass/${courseId}`
-            `${BACKEND_HOST_URL}/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
+            `${BACKEND_HOST_URL}/api/getClass/${courseName}`,config
+            // `${BACKEND_HOST_URL}/api/users/teachersClass/${courseId}/${user.email}/${user.accessToken}`
             //`/api/teachers/teachersClass/136844541806`
           );
           // console.log(response)
@@ -95,7 +109,8 @@ const Analytics = () => {
           setIsLoading(false);
         } catch (e) {
           const res1 = await axios.get(
-            `${BACKEND_HOST_URL}/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
+            `${BACKEND_HOST_URL}/api/getClass/${courseName}`,config
+            //`${BACKEND_HOST_URL}/api/users/createCompleteClass/${user.email}/${courseId}/${courseName}/${user.access_token}`
           );
           if (res1.data.status === 200) {
             console.log("class created shyd");
@@ -112,7 +127,6 @@ const Analytics = () => {
 
       getItems();
     }
-
   }, [user]);
 
   return (
@@ -161,9 +175,9 @@ const Analytics = () => {
             <Grid item lg={8} md={8} sm={12} xm={12}></Grid>
           </Grid>
         </Box>
-        {resp && resp.fileNames && (
+        {/* {resp && resp.fileNames && (
           <FileUploader courseId={courseId} resp={resp} />
-        )}
+        )} */}
         {/* <FileUploader courseId={(courseId, resp)} /> */}
         <Box style={{ marginTop: "40px", marginBottom: "40px" }}>
           <Grid container spacing={2}>
@@ -190,7 +204,7 @@ const Analytics = () => {
             </Grid>
             <Grid item lg={3} md={6} sm={12}>
               <Box
-                style={{ borderLeft: `3px solid ${blue[500]}`}}
+                style={{ borderLeft: `3px solid ${blue[500]}` }}
                 className={classes.cards}
               >
                 {!isLoading ? (
@@ -205,7 +219,7 @@ const Analytics = () => {
             </Grid>
             <Grid item lg={3} md={6} sm={12}>
               <Box
-                style={{ borderLeft: `3px solid ${amber[500]}`}}
+                style={{ borderLeft: `3px solid ${amber[500]}` }}
                 className={classes.cards}
               >
                 {!isLoading ? (

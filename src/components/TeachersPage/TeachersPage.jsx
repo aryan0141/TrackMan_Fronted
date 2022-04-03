@@ -36,6 +36,7 @@ const TeachersPage = () => {
         setIsLoading(true);
         //const response = await axios.get(`${BACKEND_HOST_URL}/api/users/courseList/${user.email}`);
         const userInfo = Cookies.get("userInfo");
+        
         const token = JSON.parse(userInfo).token;
         // console.log(JSON.parse(userInfo).token);
         // console.log(userInfo.token);
