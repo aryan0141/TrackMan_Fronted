@@ -41,7 +41,7 @@ const Analytics = () => {
   const { courseName } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const { user, setUser } = useContext(userContext);
-  console.log(user);
+  //console.log(user);
   const [resp, setResp] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
 
@@ -175,9 +175,9 @@ const Analytics = () => {
             <Grid item lg={8} md={8} sm={12} xm={12}></Grid>
           </Grid>
         </Box>
-        {/* {resp && resp.fileNames && (
-          <FileUploader courseId={courseId} resp={resp} />
-        )} */}
+        {resp && resp.fileNames && (
+          <FileUploader courseName={resp.name} resp={resp} />
+        )}
         {/* <FileUploader courseId={(courseId, resp)} /> */}
         <Box style={{ marginTop: "40px", marginBottom: "40px" }}>
           <Grid container spacing={2}>
