@@ -12,12 +12,18 @@ import { ClassWeightage } from "./ClassWeightage";
 import { blue, green, orange, yellow } from "@mui/material/colors";
 import { useAlert } from "react-alert";
 import { BACKEND_HOST_URL } from "../../config/default";
+import Cookies from "js-cookie";
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
 const ClassroomNames = ({ data, loading }) => {
+
+  const userInfo = Cookies.get("userInfo");
+  const token = JSON.parse(userInfo).token;
+  const config = { headers: { Authorization: token } };
+
   const alert = useAlert();
   var a1 = ``;
 
@@ -45,7 +51,7 @@ const ClassroomNames = ({ data, loading }) => {
   const handleFilesDelete = (fileData) => async () => {
     if (fileData.FileType === "csv") {
       const res = await axios.get(
-        `${BACKEND_HOST_URL}/api/uploadDoc/deleteEveryClass/${data.courseId}/${fileData.fileId}`
+        `${BACKEND_HOST_URL}/api/uploadFiles/deleteEveryClassv2/${data.name}/${fileData.fileId}` , config
       );
 
       if (res.data.status === 200) {
@@ -54,7 +60,7 @@ const ClassroomNames = ({ data, loading }) => {
       }
     } else if (fileData.FileType === "sbv") {
       const res = await axios.get(
-        `${BACKEND_HOST_URL}/api/uploadDoc/deleteEveryClassSbv/${data.courseId}/${fileData.fileId}`
+        `${BACKEND_HOST_URL}/api/uploadFiles/deleteEveryClassSbv/${data.name}/${fileData.fileId}` , config
       );
 
       if (res.data.status === 200) {
