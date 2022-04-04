@@ -72,7 +72,7 @@ const Login = () => {
   };
   return (
     <React.Fragment>
-      <Container>
+      {/* <Container> */}
         <Box sx={{ mt: 2 }}>
           <TextField
             style={{ width: "100%" }}
@@ -119,7 +119,7 @@ const Login = () => {
         >
           Login
         </Button>
-      </Container>
+      {/* </Container> */}
     </React.Fragment>
   );
 };

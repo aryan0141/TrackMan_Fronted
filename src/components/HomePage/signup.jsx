@@ -127,7 +127,7 @@ const Signup = () => {
   };
   return (
     <React.Fragment>
-      <Container>
+      {/* <Container> */}
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <TextField
@@ -222,7 +222,7 @@ const Signup = () => {
         >
           Submit
         </Button>
-      </Container>
+      {/* </Container> */}
     </React.Fragment>
   );
 };
