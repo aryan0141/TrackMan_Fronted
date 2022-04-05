@@ -26,7 +26,7 @@ import { useAlert } from "react-alert";
 const TeachersPage = () => {
   const alert = useAlert();
   const userInfo = Cookies.get("userInfo");
-  const token = JSON.parse(userInfo).token;
+  const token = userInfo ? JSON.parse(userInfo).token : null;
   const config = { headers: { Authorization: token } };
 
   const [isLoading, setIsLoading] = useState(true);
@@ -78,6 +78,11 @@ const TeachersPage = () => {
 
   useEffect(() => {
     if (!user || !user.email) {
+      history.push("/");
+      return;
+    }
+
+    if (!user.isActivated) {
       history.push("/");
       return;
     }
