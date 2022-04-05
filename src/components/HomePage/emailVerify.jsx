@@ -1,14 +1,19 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useContext, useState } from "react";
 import Navbar from "../navbar";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { BACKEND_HOST_URL } from "../../config/default";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
+import Cookies from "js-cookie";
+import { userContext } from "./../../userContext";
 
 const EmailVerify = () => {
   const { token } = useParams();
   const [err, setErr] = useState([]);
   const [msg, setMsg] = useState(null);
+
+  const history = useHistory();
+  const user = Cookies.get("userInfo");
 
   const verify = async () => {
     try {
@@ -17,10 +22,17 @@ const EmailVerify = () => {
           Authorization: token,
         },
       };
-      await axios.get(
-        `${BACKEND_HOST_URL}/auth/activate/${token}`,
-        config
-      );
+      await axios.get(`${BACKEND_HOST_URL}/auth/activate/${token}`, config);
+      console.log(JSON.parse(user));
+      let res = JSON.parse(user);
+      res["isActivated"] = true;
+      console.log(res);
+      Cookies.remove("userInfo");
+      Cookies.set("userInfo", JSON.stringify(res), {
+        expires: 1,
+        path: "/",
+      });
+      // setUser(res);
       setMsg("Account Verified");
     } catch (e) {
       console.log(e.response);
@@ -33,6 +45,10 @@ const EmailVerify = () => {
   };
 
   useEffect(async () => {
+    if (user == null) {
+      history.push("/");
+      return;
+    }
     await verify();
   }, []);
 

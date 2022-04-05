@@ -86,13 +86,12 @@ const Intro = () => {
         `${BACKEND_HOST_URL}/auth/v2/send-activation-link`,
         config
       );
+      alert('Activation link sent successfully to your email')
     } catch (err) {
       console.log(err.response);
       alert(err.response.data.msg);
     }
   };
-
-
 
   if (user) {
     return (
@@ -100,7 +99,11 @@ const Intro = () => {
         {!user.isActivated ? (
           <Alert style={{ margin: 20 }} severity="info">
             User account not verified.{" "}
-            <span style={{cursor:'pointer',textDecoration:'underline'}} onClick={resendActivationLink} className="resendActivationMail">
+            <span
+              style={{ cursor: "pointer", textDecoration: "underline" }}
+              onClick={resendActivationLink}
+              className="resendActivationMail"
+            >
               {" "}
               Click here to resend activation link.
             </span>
@@ -110,26 +113,28 @@ const Intro = () => {
             User account activated
           </Alert>
         )}
-        <Container
-          className={classes.vertiHoriCenter}
-          style={{ height: "90vh" }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ margin: "0px 10px" }}
-            onClick={redirectFunction}
+        {user.isActivated ? (
+          <Container
+            className={classes.vertiHoriCenter}
+            style={{ height: "90vh" }}
           >
-            For Teachers
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ margin: "0px 10px" }}
-          >
-            For Students
-          </Button>
-        </Container>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ margin: "0px 10px" }}
+              onClick={redirectFunction}
+            >
+              For Teachers
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ margin: "0px 10px" }}
+            >
+              For Students
+            </Button>
+          </Container>
+        ) : null}
       </React.Fragment>
     );
   }

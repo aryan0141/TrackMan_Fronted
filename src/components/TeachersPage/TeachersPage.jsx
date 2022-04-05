@@ -28,9 +28,8 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 // }
 
 const TeachersPage = () => {
-
   const userInfo = Cookies.get("userInfo");
-  const token = JSON.parse(userInfo).token;
+  const token = userInfo ? JSON.parse(userInfo).token : null;
   const config = { headers: { Authorization: token } };
 
   const [isLoading, setIsLoading] = useState(true);
@@ -53,13 +52,12 @@ const TeachersPage = () => {
       courseName: className,
       teacherName: JSON.parse(userInfo).email,
     };
-    console.log(createClass ,config);
+    console.log(createClass, config);
     await axios.post(
       `${BACKEND_HOST_URL}/api/createClass`,
       { createClass },
       config
     );
-
   }
 
   function handleClick() {
@@ -68,6 +66,11 @@ const TeachersPage = () => {
 
   useEffect(() => {
     if (!user || !user.email) {
+      history.push("/");
+      return;
+    }
+
+    if (!user.isActivated) {
       history.push("/");
       return;
     }
