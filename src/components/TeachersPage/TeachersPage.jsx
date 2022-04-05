@@ -22,7 +22,6 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useAlert } from "react-alert";
 
-
 const TeachersPage = () => {
   const alert = useAlert();
   const userInfo = Cookies.get("userInfo");
@@ -45,20 +44,20 @@ const TeachersPage = () => {
       setClassNameError(true);
       return;
     }
-    var classFound = false;
-    for(var i=0; i<resp.length; i++) {
-      if(className.toLowerCase() === resp[i].name) {
-        classFound = true;
-      }
-    }
-    if(classFound) {
-      alert.error("Class with that name already exists");
-      setClassName("");
-      return;
-    }
+    // var classFound = false;
+    // for (var i = 0; i < resp.length; i++) {
+    //   if (className.toLowerCase() === resp[i].name) {
+    //     classFound = true;
+    //   }
+    // }
+    // if (classFound) {
+    //   alert.error("Class with that name already exists");
+    //   setClassName("");
+    //   return;
+    // }
 
     const createClass = {
-      courseName: className.toLowerCase(),
+      courseName: className,
       teacherName: JSON.parse(userInfo).email,
     };
     console.log(createClass, config);
@@ -115,6 +114,29 @@ const TeachersPage = () => {
   return (
     <React.Fragment>
       <Navbar />
+      <Container sx={{ display: "flex", margin: "10px 0px" }}>
+        <IconButton onClick={handleClick}>
+          <AddCircleOutlineIcon sx={{ fontSize: 40 }} color="primary" />
+        </IconButton>
+        {showInput ? (
+          <Box sx={{ margin: "auto 10px" }}>
+            <FormControl sx={{ marginRight: "10px" }}>
+              <TextField
+                id="outlined-basic"
+                label="Enter Class Name"
+                variant="outlined"
+                size="small"
+                error={classNameError}
+                value={className}
+                onChange={(e) => setClassName(e.target.value)}
+              />
+            </FormControl>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+              Enter
+            </Button>
+          </Box>
+        ) : null}
+      </Container>
       <Box style={{ margin: "30px" }}>
         <Grid container spacing={2}>
           {!isLoading ? (
@@ -146,29 +168,6 @@ const TeachersPage = () => {
             // </p>
           )}
         </Grid>
-      </Box>
-      <Box sx={{ display: "flex", margin: "10px" }}>
-        <IconButton onClick={handleClick}>
-          <AddCircleOutlineIcon sx={{ fontSize: 40 }} color="primary" />
-        </IconButton>
-        {showInput ? (
-          <Box sx={{ margin: "auto 10px" }}>
-            <FormControl sx={{ marginRight: "10px" }}>
-              <TextField
-                id="outlined-basic"
-                label="Enter Class Name"
-                variant="outlined"
-                size="small"
-                error={classNameError}
-                value={className}
-                onChange={(e) => setClassName(e.target.value)}
-              />
-            </FormControl>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
-              Enter
-            </Button>
-          </Box>
-        ) : null}
       </Box>
     </React.Fragment>
   );
