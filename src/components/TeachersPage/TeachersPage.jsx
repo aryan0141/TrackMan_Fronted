@@ -28,6 +28,11 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 // }
 
 const TeachersPage = () => {
+
+  const userInfo = Cookies.get("userInfo");
+  const token = JSON.parse(userInfo).token;
+  const config = { headers: { Authorization: token } };
+
   const [isLoading, setIsLoading] = useState(true);
   const [permission, setPermission] = useState(false);
   const history = useHistory();
@@ -39,12 +44,22 @@ const TeachersPage = () => {
   const [className, setClassName] = useState("");
   const [classNameError, setClassNameError] = useState(false);
 
-  function handleSubmit() {
-    if (className == "") {
+  async function handleSubmit() {
+    if (className === "") {
       setClassNameError(true);
       return;
     }
-    alert(className);
+    const createClass = {
+      courseName: className,
+      teacherName: JSON.parse(userInfo).email,
+    };
+    console.log(createClass ,config);
+    await axios.post(
+      `${BACKEND_HOST_URL}/api/createClass`,
+      { createClass },
+      config
+    );
+
   }
 
   function handleClick() {
@@ -105,10 +120,6 @@ const TeachersPage = () => {
       <Box style={{ margin: "30px" }}>
         <Grid container spacing={2}>
           {!isLoading ? (
-            // resp.courses.length && resp.courses.map((item) => (
-            //   <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
-            //     <ClassroomCard item={item} />
-            //   </Grid>))
             resp && resp.length ? (
               resp.map((item) => (
                 <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
