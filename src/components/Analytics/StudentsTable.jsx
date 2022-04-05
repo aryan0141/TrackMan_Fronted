@@ -126,7 +126,7 @@ export default function CollapsibleTable({ resp, studentsData }) {
           </TableHead>
           {wait ? null : (
             <TableBody>
-              {data.length == 0 ? (
+              {data.length === 0 ? (
                 <Typography variant="text" color="textSecondary">
                   No results found
                 </Typography>

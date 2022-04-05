@@ -34,6 +34,11 @@ const FileUploader = ({ courseName, resp }) => {
       alert("Select a file first");
       return;
     }
+    const maxFiles = 10;
+    if(file.length > maxFiles) {
+      alert(`Only ${maxFiles} files can be uploaded at a time`);
+      return;
+    }
 
     var sortedArray = [];
     for (let x = 0; x < file.length; x++) {
