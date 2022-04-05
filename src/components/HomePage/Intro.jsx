@@ -57,7 +57,22 @@ const Intro = () => {
     /* window.location.href="/teachersPage"; */
   };
 
-  const [loginSignUp, setLoginSignUp] = useState("signup");
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+
+  function handleClick(str) {
+    if (str === "login") {
+      if (showSignup) {
+        setShowSignup(false);
+      }
+      setShowLogin(true);
+    } else {
+      if (showLogin) {
+        setShowLogin(false);
+      }
+      setShowSignup(true);
+    }
+  }
 
   // Resend account activation link
   const resendActivationLink = async () => {
@@ -77,24 +92,7 @@ const Intro = () => {
     }
   };
 
-  const responseGoogle = (response) => {
-    const { code } = response;
-    axios
-      .post(`${BACKEND_HOST_URL}/api/users/create-tokens`, { code })
-      .then((response) => {
-        // console.log(response.data);
-        Cookies.set("userInfo", response.data.access_token, {
-          expires: 0.04,
-          path: "/",
-        });
-        setUser(response.data);
-      })
-      .catch((error) => console.log(error.message));
-  };
 
-  const responseError = (error) => {
-    console.log(error);
-  };
 
   if (user) {
     return (
@@ -168,7 +166,7 @@ const Intro = () => {
             <br />
             <Box>
               <Button
-                onClick={() => setLoginSignUp("login")}
+                onClick={() => handleClick("login")}
                 variant="contained"
                 color="primary"
                 style={{ marginRight: "5px" }}
@@ -176,7 +174,7 @@ const Intro = () => {
                 Login
               </Button>
               <Button
-                onClick={() => setLoginSignUp("signup")}
+                onClick={() => handleClick("signup")}
                 variant="contained"
                 color="primary"
               >
@@ -184,7 +182,9 @@ const Intro = () => {
               </Button>
             </Box>
             <br />
-            {loginSignUp === "login" ? <Login /> : <Signup />}
+            {showLogin ? <Login /> : null}
+            {showSignup ? <Signup /> : null}
+            {/* {loginSignUp === "login" ? <Login /> : <Signup />} */}
           </Box>
         </Grid>
         <Grid item lg={6} md={6} sm={12}>
