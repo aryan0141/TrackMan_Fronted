@@ -105,12 +105,18 @@ const FileUploader = ({ courseName, resp }) => {
           config
         )
         .then(async (res) => {
+
+          
           setUploadPercentage(100);
-          setTimeout(() => {
+          setTimeout(async() => {
+            await axios.get(`${BACKEND_HOST_URL}/api/StudentsData/updateData/${resp.name}/${resp.teacher}` , config);
             setUploadPercentage(0);
             setUploadBtnDisabled(false);
             setFile(null);
           }, 1000);
+                    setTimeout(() => {
+                      history.go(0);
+                    }, 2000);
         });
     // }, 20000);
 
