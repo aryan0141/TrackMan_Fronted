@@ -9,14 +9,14 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import LinearProgress from "@mui/material/LinearProgress";
 import { BACKEND_HOST_URL } from "../../config/default";
 import Cookies from "js-cookie";
-// import {ProgressBar} from 'react-bootstrap';
+import { useAlert } from "react-alert";
 
 const FileUploader = ({ courseName, resp }) => {
   //console.log(resp);
-
-      const userInfo = Cookies.get("userInfo");
-      const token = JSON.parse(userInfo).token;
-      const config = { headers: { Authorization: token } };
+  const alert = useAlert();
+  const userInfo = Cookies.get("userInfo");
+  const token = JSON.parse(userInfo).token;
+  const config = { headers: { Authorization: token } };
 
   const [file, setFile] = useState(null);
   const [sortedFiles, setSortedFiles] = useState([]);
@@ -29,14 +29,13 @@ const FileUploader = ({ courseName, resp }) => {
 
   const history = useHistory();
   const onSubmit = (e) => {
-    console.log(file[0].name);
     if (file == null) {
-      alert("Select a file first");
+      alert.error("Select a file first");
       return;
     }
     const maxFiles = 10;
-    if(file.length > maxFiles) {
-      alert(`Only ${maxFiles} files can be uploaded at a time`);
+    if (file.length > maxFiles) {
+      alert.error(`Only ${maxFiles} files can be uploaded at a time`);
       return;
     }
 
@@ -61,22 +60,22 @@ const FileUploader = ({ courseName, resp }) => {
           fileName2 = name3.split(" @")[0].trim();
         }
 
-        console.log(fileName2);
+        // console.log(fileName2);
 
         if (resp.name === fileName2) {
           sortedArray.push(file[x]);
         } else {
           console.log(resp.name);
           console.log(fileName2);
-          alert("Not a valid File Name");
+          alert.error("Not a valid File Name");
         }
         // setSortedFiles((prev) => [...prev, file[x]]);
       } else {
-        alert(`${file[x].name} is not a csv or a sbv file`);
+        alert.error(`${file[x].name} is not a csv or a sbv file`);
       }
       //console.log(sortedArray);
     }
-    console.log(sortedArray);
+    // console.log(sortedArray);
 
     setSortedFiles(sortedArray);
 
@@ -101,28 +100,29 @@ const FileUploader = ({ courseName, resp }) => {
     };
     // console.log(bodyFormData)
     // setTimeout(() => {
-      console.log(bodyFormData);
-      axios
-        .post(
-          `${BACKEND_HOST_URL}/api/uploadFiles/upload`,
-          bodyFormData,
-          // options,
-          config
-        )
-        .then(async (res) => {
-
-          
-          setUploadPercentage(100);
-          setTimeout(async() => {
-            await axios.get(`${BACKEND_HOST_URL}/api/StudentsData/updateData/${resp.name}/${resp.teacher}` , config);
-            setUploadPercentage(0);
-            setUploadBtnDisabled(false);
-            setFile(null);
-          }, 1000);
-                    setTimeout(() => {
-                      history.go(0);
-                    }, 2000);
-        });
+    console.log(bodyFormData);
+    axios
+      .post(
+        `${BACKEND_HOST_URL}/api/uploadFiles/upload`,
+        bodyFormData,
+        // options,
+        config
+      )
+      .then(async (res) => {
+        setUploadPercentage(100);
+        setTimeout(async () => {
+          await axios.get(
+            `${BACKEND_HOST_URL}/api/StudentsData/updateData/${resp.name}/${resp.teacher}`,
+            config
+          );
+          setUploadPercentage(0);
+          setUploadBtnDisabled(false);
+          setFile(null);
+        }, 1000);
+        setTimeout(() => {
+          history.go(0);
+        }, 2000);
+      });
     // }, 20000);
 
     // // if(fileNames.includes(file)) {
@@ -268,14 +268,15 @@ const FileUploader = ({ courseName, resp }) => {
               Drag and Drop Your file or Click here
             </Typography>
           </div>
-          {file && (
+          {file && [...file].map((data, index) => (
             <Typography
+              key={index}
               color="textSecondary"
               style={{ fontSize: "0.9rem", marginBottom: "5px" }}
             >
-              <b>Selected:</b> {file.name}
+              <b>Selected:</b> {data.name}
             </Typography>
-          )}
+          ))}
           <Button
             disabled={uploadBtnDisabled}
             variant="contained"

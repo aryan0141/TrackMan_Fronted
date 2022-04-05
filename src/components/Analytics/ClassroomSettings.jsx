@@ -193,7 +193,8 @@ const ClassroomNames = ({ data, loading }) => {
           borderRadius: "4px",
         }}
       >
-        <Box
+        {/* Classroom Names */}
+        {/* <Box
           sx={{
             marginBottom: "20px",
           }}
@@ -282,7 +283,7 @@ const ClassroomNames = ({ data, loading }) => {
             border: "none",
             backgroundColor: blue[500],
           }}
-        />
+        /> */}
 
         {/* Cutt off time */}
         <Box

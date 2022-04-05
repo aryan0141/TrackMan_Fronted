@@ -20,15 +20,11 @@ import { BACKEND_HOST_URL } from "../../config/default";
 import Cookies from "js-cookie";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { useAlert } from "react-alert";
 
-// const load = async (email) => {
-//   const resp = await axios.get(`/api/users/courseList/${email}`);
-//   //console.log(resp.data);
-//   return(resp.data);
-// }
 
 const TeachersPage = () => {
-
+  const alert = useAlert();
   const userInfo = Cookies.get("userInfo");
   const token = JSON.parse(userInfo).token;
   const config = { headers: { Authorization: token } };
@@ -49,17 +45,31 @@ const TeachersPage = () => {
       setClassNameError(true);
       return;
     }
+    var classFound = false;
+    for(var i=0; i<resp.length; i++) {
+      if(className.toLowerCase() === resp[i].name) {
+        classFound = true;
+      }
+    }
+    if(classFound) {
+      alert.error("Class with that name already exists");
+      setClassName("");
+      return;
+    }
+
     const createClass = {
-      courseName: className,
+      courseName: className.toLowerCase(),
       teacherName: JSON.parse(userInfo).email,
     };
-    console.log(createClass ,config);
-    await axios.post(
+    console.log(createClass, config);
+    const newClass = await axios.post(
       `${BACKEND_HOST_URL}/api/createClass`,
       { createClass },
       config
     );
-
+    resp.push(newClass.data);
+    setResp([...resp]);
+    setClassName("");
   }
 
   function handleClick() {
@@ -75,44 +85,27 @@ const TeachersPage = () => {
     const getItems = async () => {
       try {
         setIsLoading(true);
-        //const response = await axios.get(`${BACKEND_HOST_URL}/api/users/courseList/${user.email}`);
         const userInfo = Cookies.get("userInfo");
-
         const token = JSON.parse(userInfo).token;
-        // console.log(JSON.parse(userInfo).token);
-        // console.log(userInfo.token);
-        // const  token =
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNDcxMmFhNzdhZWM0NjkxNGMyZjU3YSIsImlhdCI6MTY0ODg5NjMwOSwiZXhwIjoxNjQ4OTgyNzA5fQ.qFKyesB1Z9wzjng8G2bYVn5prkC4EoT_FJLRhdouGnU";
         const config = { headers: { Authorization: token } };
-        // console.log(config);
-        // console.log(token);
         const response1 = await axios.get(
           `${BACKEND_HOST_URL}/api/getClasses`,
           config
         );
         if (response1.status === 400) {
-          console.log("error occured here ");
           setPermission(true);
         } else {
-          console.log("no error occured here");
           setResp(response1.data);
           setIsLoading(false);
         }
       } catch (e) {
-        // setPermission(true);
         console.log("error occured  ");
         console.log(e);
       }
     };
 
-    // if (response.data.status === 200) {
-
     getItems();
   }, [user]);
-
-  console.log(resp);
-
-  //console.log(resp);
 
   return (
     <React.Fragment>
@@ -122,7 +115,7 @@ const TeachersPage = () => {
           {!isLoading ? (
             resp && resp.length ? (
               resp.map((item) => (
-                <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
+                <Grid key={item._id} item xs={12} sm={6} md={6} lg={3}>
                   <ClassroomCard item={item} />
                 </Grid>
               ))

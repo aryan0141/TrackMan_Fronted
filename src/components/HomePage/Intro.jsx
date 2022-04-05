@@ -182,10 +182,6 @@ const Intro = () => {
               </Button>
             </Box>
             <br />
-<<<<<<< HEAD
-            
-=======
->>>>>>> upstream/v2
             {showLogin ? <Login /> : null}
             {showSignup ? <Signup /> : null}
             {/* {loginSignUp === "login" ? <Login /> : <Signup />} */}
