@@ -34,6 +34,11 @@ const FileUploader = ({ courseName, resp }) => {
       alert("Select a file first");
       return;
     }
+    const maxFiles = 10;
+    if(file.length > maxFiles) {
+      alert(`Only ${maxFiles} files can be uploaded at a time`);
+      return;
+    }
 
     var sortedArray = [];
     for (let x = 0; x < file.length; x++) {
@@ -105,12 +110,18 @@ const FileUploader = ({ courseName, resp }) => {
           config
         )
         .then(async (res) => {
+
+          
           setUploadPercentage(100);
-          setTimeout(() => {
+          setTimeout(async() => {
+            await axios.get(`${BACKEND_HOST_URL}/api/StudentsData/updateData/${resp.name}/${resp.teacher}` , config);
             setUploadPercentage(0);
             setUploadBtnDisabled(false);
             setFile(null);
           }, 1000);
+                    setTimeout(() => {
+                      history.go(0);
+                    }, 2000);
         });
     // }, 20000);
 

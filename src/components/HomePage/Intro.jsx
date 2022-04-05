@@ -7,6 +7,7 @@ import { GoogleLogin } from "react-google-login";
 import { userContext } from "./../../userContext";
 import { Button, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
+import Alert from "@mui/material/Alert";
 import { Box } from "@mui/system";
 import Cookies from "js-cookie";
 import { BACKEND_HOST_URL } from "../../config/default";
@@ -60,28 +61,55 @@ const Intro = () => {
   const [showSignup, setShowSignup] = useState(false);
 
   function handleClick(str) {
-    if(str==="login") {
-      if(showSignup) {
+    if (str === "login") {
+      if (showSignup) {
         setShowSignup(false);
       }
       setShowLogin(true);
     } else {
-      if(showLogin) {
+      if (showLogin) {
         setShowLogin(false);
       }
       setShowSignup(true);
     }
   }
 
-  // const [loginSignUp, setLoginSignUp] = useState("signup");
-
-  const responseError = (error) => {
-    console.log(error);
+  // Resend account activation link
+  const resendActivationLink = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: user?.token,
+        },
+      };
+      await axios.get(
+        `${BACKEND_HOST_URL}/auth/v2/send-activation-link`,
+        config
+      );
+    } catch (err) {
+      console.log(err.response);
+      alert(err.response.data.msg);
+    }
   };
+
+
 
   if (user) {
     return (
       <React.Fragment>
+        {!user.isActivated ? (
+          <Alert style={{ margin: 20 }} severity="info">
+            User account not verified.{" "}
+            <span style={{cursor:'pointer',textDecoration:'underline'}} onClick={resendActivationLink} className="resendActivationMail">
+              {" "}
+              Click here to resend activation link.
+            </span>
+          </Alert>
+        ) : (
+          <Alert style={{ margin: 20 }} severity="success">
+            User account activated
+          </Alert>
+        )}
         <Container
           className={classes.vertiHoriCenter}
           style={{ height: "90vh" }}
@@ -154,7 +182,10 @@ const Intro = () => {
               </Button>
             </Box>
             <br />
+<<<<<<< HEAD
             
+=======
+>>>>>>> upstream/v2
             {showLogin ? <Login /> : null}
             {showSignup ? <Signup /> : null}
             {/* {loginSignUp === "login" ? <Login /> : <Signup />} */}

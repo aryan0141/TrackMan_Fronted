@@ -50,21 +50,37 @@ const ClassroomNames = ({ data, loading }) => {
 
   const handleFilesDelete = (fileData) => async () => {
     if (fileData.FileType === "csv") {
-      const res = await axios.get(
-        `${BACKEND_HOST_URL}/api/uploadFiles/deleteEveryClassv2/${data.name}/${fileData.fileId}` , config
-      );
+      const res = await axios.get(`${BACKEND_HOST_URL}/api/uploadFiles/deleteEveryClassv2/${data.name}/${fileData.fileId}` , config);
 
+      
       if (res.data.status === 200) {
-        history.go(0);
+        const res1 = axios.get(
+          `${BACKEND_HOST_URL}/api/StudentsData/updateData/${data.name}/${data.teacher}`,
+          config
+        );
+
+        setTimeout(() => {
+          history.go(0);
+        }, 2000);
+
         alert.success("Deleted Successfully");
       }
     } else if (fileData.FileType === "sbv") {
       const res = await axios.get(
-        `${BACKEND_HOST_URL}/api/uploadFiles/deleteEveryClassSbv/${data.name}/${fileData.fileId}` , config
+        `${BACKEND_HOST_URL}/api/uploadFiles/deleteEveryClassSbv/${data.name}/${fileData.fileId}`,
+        config
       );
 
       if (res.data.status === 200) {
-        history.go(0);
+        const res1 = axios.get(
+          `${BACKEND_HOST_URL}/api/StudentsData/updateData/${data.name}/${data.teacher}`,
+          config
+        );
+
+        setTimeout(() => {
+          history.go(0);
+        }, 2000);
+
         alert.success("Deleted Successfully");
       }
     }
