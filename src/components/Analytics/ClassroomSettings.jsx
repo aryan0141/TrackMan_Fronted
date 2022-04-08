@@ -97,7 +97,7 @@ const ClassroomNames = ({ data, loading }) => {
       const filename = {
         name: nameToDelete,
         classname: data.name,
-        //"mathematics121"
+        
       };
       console.log(filename);
       const res = await axios.post(
@@ -125,22 +125,20 @@ const ClassroomNames = ({ data, loading }) => {
 
     const cuttOffMin1 = {
       cuttOffMin: time,
-      className1: data.name,
+      className1: data.name
+     
     };
 
     try {
-      console.log(cuttOffMin1);
       const res = await axios.post(
-        `${BACKEND_HOST_URL}/api/fileNames/updateCuttOffMin`,
-        { cuttOffMin1 }
+        `${BACKEND_HOST_URL}/api/fileNames/updateCuttOffMin`, {cuttOffMin1} ,
+        config,
       );
       if (res.data.status === 400) {
         alert.error(res.data.msg);
-        // return;
       } else if (res.data.status === 200) {
-        //console.log("Success 123");
         setFinalTime(time);
-        // setNameData([...nameData,name]);
+        alert.success("Updated Successfully");
       }
     } catch (e) {
       console.log(e);

@@ -22,18 +22,18 @@ const FileUploader = ({ courseName, resp }) => {
   const [sortedFiles, setSortedFiles] = useState([]);
   const [uploadBtnDisabled, setUploadBtnDisabled] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
+  const maxFiles = 20;
 
   const onInputChange = (e) => {
     setFile(e.target.files);
   };
-  console.log(resp, "hello");
   const history = useHistory();
   const onSubmit = (e) => {
     if (file == null) {
       alert.error("Select a file first");
       return;
     }
-    const maxFiles = 10;
+
     if (file.length > maxFiles) {
       alert.error(`Only ${maxFiles} files can be uploaded at a time`);
       return;
@@ -41,18 +41,19 @@ const FileUploader = ({ courseName, resp }) => {
 
     // To check if a file is already uploaded or not.
     var sameFileUploaded = false;
-    file && [...file].map((data) => {
-      var found = false;
-      if(resp.uploadNames) {
-        resp.uploadNames.forEach((file) => {
-          if(file.filename == data.name) {
-            found = true;
-          }
+    file &&
+      [...file].map((data) => {
+        var found = false;
+        if (resp.uploadNames) {
+          resp.uploadNames.forEach((file) => {
+            if (file.filename == data.name) {
+              found = true;
+            }
+          });
+          sameFileUploaded = found;
+        }
       });
-      sameFileUploaded = found;
-      }
-    })
-    if(sameFileUploaded) {
+    if (sameFileUploaded) {
       alert.error(`Some files are already uploaded`);
       return;
     }
@@ -107,8 +108,6 @@ const FileUploader = ({ courseName, resp }) => {
         }
       },
     };
-
-    console.log(bodyFormData);
     axios
       .post(
         `${BACKEND_HOST_URL}/api/uploadFiles/upload`,
@@ -166,17 +165,26 @@ const FileUploader = ({ courseName, resp }) => {
             />
             <Typography align="center">
               Drag and Drop Your file or Click here
+              <br/>
+              <Typography
+                variant="text"
+                color="textSecondary"
+                style={{ fontSize: "0.8rem" }}
+              >
+                (Max. {maxFiles} Files can be uploaded at a time)
+              </Typography>
             </Typography>
           </div>
-          {file && [...file].map((data, index) => (
-            <Typography
-              key={index}
-              color="textSecondary"
-              style={{ fontSize: "0.9rem", marginBottom: "5px" }}
-            >
-              <b>Selected:</b> {data.name}
-            </Typography>
-          ))}
+          {file &&
+            [...file].map((data, index) => (
+              <Typography
+                key={index}
+                color="textSecondary"
+                style={{ fontSize: "0.9rem", marginBottom: "5px" }}
+              >
+                <b>Selected:</b> {data.name}
+              </Typography>
+            ))}
           <Button
             disabled={uploadBtnDisabled}
             variant="contained"

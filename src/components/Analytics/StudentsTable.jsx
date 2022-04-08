@@ -71,8 +71,8 @@ export default function CollapsibleTable({ resp, studentsData }) {
     var maxComment = 0;
     var maxTimeWatched = 0;
     for (var i = 0; i < data.length; i++) {
-      maxComment = Math.max(maxComment, data[i].comments)
-      maxTimeWatched = Math.max(maxTimeWatched, data[i].duration)
+      maxComment = Math.max(maxComment, data[i].comments);
+      maxTimeWatched = Math.max(maxTimeWatched, data[i].duration);
       // totalChats += data[i].comments;
     }
     data.forEach((object) => {
@@ -100,6 +100,7 @@ export default function CollapsibleTable({ resp, studentsData }) {
         data={resp.StudentsData}
         query={searchQuery}
         studentsData={data}
+        classroomDetails={resp}
         onChange={(data, query) => {
           setData([...data]);
           setSearchQuery(query);
