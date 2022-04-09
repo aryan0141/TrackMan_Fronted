@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Grid } from "@mui/material";
+import { ExportData } from "./ExportData";
 
 export const Filters = (props) => {
   const [age, setAge] = React.useState("");
@@ -177,6 +178,7 @@ export const Filters = (props) => {
             </FormControl>
           </Grid>
         </Grid>
+        <ExportData studentsData={props.studentsData} classroomDetails={props.classroomDetails} />
       </Box>
     </React.Fragment>
   );

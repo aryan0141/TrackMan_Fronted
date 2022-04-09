@@ -9,37 +9,54 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import LinearProgress from "@mui/material/LinearProgress";
 import { BACKEND_HOST_URL } from "../../config/default";
 import Cookies from "js-cookie";
-// import {ProgressBar} from 'react-bootstrap';
+import { useAlert } from "react-alert";
 
 const FileUploader = ({ courseName, resp }) => {
   //console.log(resp);
-
-      const userInfo = Cookies.get("userInfo");
-      const token = JSON.parse(userInfo).token;
-      const config = { headers: { Authorization: token } };
+  const alert = useAlert();
+  const userInfo = Cookies.get("userInfo");
+  const token = JSON.parse(userInfo).token;
+  const config = { headers: { Authorization: token } };
 
   const [file, setFile] = useState(null);
   const [sortedFiles, setSortedFiles] = useState([]);
   const [uploadBtnDisabled, setUploadBtnDisabled] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
+  const maxFiles = 20;
 
   const onInputChange = (e) => {
     setFile(e.target.files);
   };
-
   const history = useHistory();
   const onSubmit = (e) => {
-    console.log(file[0].name);
     if (file == null) {
-      alert("Select a file first");
-      return;
-    }
-    const maxFiles = 10;
-    if(file.length > maxFiles) {
-      alert(`Only ${maxFiles} files can be uploaded at a time`);
+      alert.error("Select a file first");
       return;
     }
 
+    if (file.length > maxFiles) {
+      alert.error(`Only ${maxFiles} files can be uploaded at a time`);
+      return;
+    }
+
+    // To check if a file is already uploaded or not.
+    var sameFileUploaded = false;
+    file &&
+      [...file].map((data) => {
+        var found = false;
+        if (resp.uploadNames) {
+          resp.uploadNames.forEach((file) => {
+            if (file.filename == data.name) {
+              found = true;
+            }
+          });
+          sameFileUploaded = found;
+        }
+      });
+    if (sameFileUploaded) {
+      alert.error(`Some files are already uploaded`);
+      return;
+    }
     var sortedArray = [];
     for (let x = 0; x < file.length; x++) {
       const fileName1 = file[x].name;
@@ -52,7 +69,6 @@ const FileUploader = ({ courseName, resp }) => {
         if (extension === "csv") {
           const st1 = file[x].name.split(" - Attendance Report.csv");
           const st2 = st1[0];
-          // console.log(st2);
           fileName2 = st2.substring(17, st2.length);
         } else if (extension === "sbv") {
           const name2 = file[x].name.split(".sbv")[0];
@@ -61,22 +77,15 @@ const FileUploader = ({ courseName, resp }) => {
           fileName2 = name3.split(" @")[0].trim();
         }
 
-        console.log(fileName2);
-
         if (resp.name === fileName2) {
           sortedArray.push(file[x]);
         } else {
-          console.log(resp.name);
-          console.log(fileName2);
-          alert("Not a valid File Name");
+          alert.error("Not a valid File Name");
         }
-        // setSortedFiles((prev) => [...prev, file[x]]);
       } else {
-        alert(`${file[x].name} is not a csv or a sbv file`);
+        alert.error(`${file[x].name} is not a csv or a sbv file`);
       }
-      //console.log(sortedArray);
     }
-    console.log(sortedArray);
 
     setSortedFiles(sortedArray);
 
@@ -99,138 +108,28 @@ const FileUploader = ({ courseName, resp }) => {
         }
       },
     };
-    // console.log(bodyFormData)
-    // setTimeout(() => {
-      console.log(bodyFormData);
-      axios
-        .post(
-          `${BACKEND_HOST_URL}/api/uploadFiles/upload`,
-          bodyFormData,
-          // options,
-          config
-        )
-        .then(async (res) => {
-
-          
-          setUploadPercentage(100);
-          setTimeout(async() => {
-            await axios.get(`${BACKEND_HOST_URL}/api/StudentsData/updateData/${resp.name}/${resp.teacher}` , config);
-            setUploadPercentage(0);
-            setUploadBtnDisabled(false);
-            setFile(null);
-          }, 1000);
-                    setTimeout(() => {
-                      history.go(0);
-                    }, 2000);
-        });
-    // }, 20000);
-
-    // // if(fileNames.includes(file)) {
-    // //   alert("You cannot upload the same file again, first delete it than upload it again.");
-    // //   return;
-    // // }
-
-    // const fileName1 = file.name;
-    // var arr = fileName1.split(".");
-    // var extension = arr[arr.length - 1];
-    // //console.log(extension);
-    // if (extension !== "csv" && extension !== "sbv") {
-    //   alert("Select a Valid .csv or .sbv type File");
-    //   return;
-    // }
-    // //console.log(file);
-    // if (resp.uploadNames) {
-    //   for (let x = 0; x < resp.uploadNames.length; x++) {
-    //     if (resp.uploadNames[x].filename === fileName1) {
-    //       alert("File already uploaded");
-    //       return;
-    //     }
-    //   }
-    // }
-
-    // // if(extension==="csv"){
-    // //   //const filename2 = arr[0];
-    // //   const st1 = fileName1.split(" - Attendance Report.csv");
-    // //   const st2 = st1[0];
-    // //   const st3 = st2.substring(17, st2.length);
-    // //   console.log(st3);
-    // //   if(!fileNames.includes(st3)){
-    // //     alert("FileName not allowed for this class");
-    // //     return;
-    // //   }else{
-
-    // //   }
-    // // }
-    // setUploadBtnDisabled(true);
-    // e.preventDefault();
-
-    // const data = new FormData();
-    // data.append("file", file);
-
-    // const options = {
-    //   onUploadProgress: (progressEvent) => {
-    //     const { loaded, total } = progressEvent;
-    //     let percent = Math.floor((loaded * 100) / total);
-    //     console.log(`${loaded}kb of ${total}kb | ${percent}%`);
-
-    //     if (percent < 100) {
-    //       setUploadPercentage(percent);
-    //     }
-    //   },
-    // };
-
-    // axios
-    //   .post(`${BACKEND_HOST_URL}/api/uploadDoc/upload`, data, options)
-    //   .then(async (res) => {
-    //     // console.log(res, "INSIDE");
-
-    //     //console.log(res.data.originalname);
-
-    //     // const fileName = String(res.data.originalname);
-    //     //console.log(fileName);
-    //     // var fileName = req.files.upload.name;
-
-    //     // axios.post(`http://localhost:3000/api/uploadDoc/addClass` , {fileName}).then((e) =>{
-    //     //     console.log("Ok printed");
-    //     //     history.push(`/analytics/${courseId}`);
-
-    //     // }).catch((e)=>{
-    //     //     console.log("error" , e)
-    //     // })
-
-    //     const fileName22 = {
-    //       fileName: String(res.data.originalname),
-    //       courseId22: resp.courseId,
-    //     };
-
-    //     const res12 = await axios.post(
-    //       `${BACKEND_HOST_URL}/api/uploadDoc/addClass`,
-    //       { fileName22 }
-    //     );
-    //     console.log(res12);
-
-    //     if (res12.data.status === 200) {
-    //       console.log(res12);
-    //       // history.go(0);
-    //       setTimeout(() => {
-    //         history.go(0);
-    //       }, 1000);
-    //     } else if (res12.data.status === 400) {
-    //       alert("Error with filename or class's name");
-    //       setTimeout(() => {
-    //         history.go(0);
-    //       }, 1000);
-    //     }
-    //     console.log("Success");
-
-    //     setUploadPercentage(100);
-    //     setTimeout(() => {
-    //       setUploadPercentage(0);
-    //       setUploadBtnDisabled(false);
-    //       setFile(null);
-    //     }, 1000);
-    //}
-    //);
+    axios
+      .post(
+        `${BACKEND_HOST_URL}/api/uploadFiles/upload`,
+        bodyFormData,
+        // options,
+        config
+      )
+      .then(async (res) => {
+        setUploadPercentage(100);
+        setTimeout(async () => {
+          await axios.get(
+            `${BACKEND_HOST_URL}/api/StudentsData/updateData/${resp.name}/${resp.teacher}`,
+            config
+          );
+          setUploadPercentage(0);
+          setUploadBtnDisabled(false);
+          setFile(null);
+        }, 1000);
+        setTimeout(() => {
+          history.go(0);
+        }, 2000);
+      });
   };
   return (
     <Container
@@ -266,16 +165,26 @@ const FileUploader = ({ courseName, resp }) => {
             />
             <Typography align="center">
               Drag and Drop Your file or Click here
+              <br/>
+              <Typography
+                variant="text"
+                color="textSecondary"
+                style={{ fontSize: "0.8rem" }}
+              >
+                (Max. {maxFiles} Files can be uploaded at a time)
+              </Typography>
             </Typography>
           </div>
-          {file && (
-            <Typography
-              color="textSecondary"
-              style={{ fontSize: "0.9rem", marginBottom: "5px" }}
-            >
-              <b>Selected:</b> {file.name}
-            </Typography>
-          )}
+          {file &&
+            [...file].map((data, index) => (
+              <Typography
+                key={index}
+                color="textSecondary"
+                style={{ fontSize: "0.9rem", marginBottom: "5px" }}
+              >
+                <b>Selected:</b> {data.name}
+              </Typography>
+            ))}
           <Button
             disabled={uploadBtnDisabled}
             variant="contained"

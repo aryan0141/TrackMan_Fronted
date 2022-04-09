@@ -4,27 +4,18 @@ import { useContext } from "react";
 import Card from "@mui/material/Card";
 import { useHistory } from "react-router-dom";
 import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import { userContext } from "../../userContext";
-import styled from "styled-components";
-import { Box } from "@mui/system";
-import { amber, blue, green, orange, purple, teal, yellow } from "@mui/material/colors";
-import { BACKEND_HOST_URL } from "../../config/default";
+import {
+  blue,
+} from "@mui/material/colors";
+// import { BACKEND_HOST_URL } from "../../config/default";
+import { Container } from "@mui/material";
 
 const ClassroomCard = ({ item, color }) => {
   const { user, setUser } = useContext(userContext);
-
-  const func = () => {
-    axios.get(
-      `${BACKEND_HOST_URL}/api/users/createCompleteClass/${user.email}/${item.id}/${item.name}/${user.access_token}`
-    );
-  };
-
   const history = useHistory();
   const classroomPage = () => {
     history.push(`/analytics/${item.name}`);
@@ -33,50 +24,46 @@ const ClassroomCard = ({ item, color }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
-        sx={{ minHeight: 50 }}
         avatar={
           <Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">
-            {item.name[0]}
+            {item.name[0].toUpperCase()}
           </Avatar>
         }
-        // action={
-        //   <IconButton aria-label="settings">
-        //     <DeleteIcon />
-        //   </IconButton>
-        // }
-        title={item.name}
-        subheader={`Room: ${item.room} | Section: ${item.section}`}
+        titleTypographyProps={{ variant: "h5" }}
+        title={item.name[0].toUpperCase() + item.name.slice(1)}
       />
-      {/* <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id eum,
-          pariatur tenetur, ab vel cupiditate aliquam odit asperiores excepturi
-          rerum tempora.
-        </Typography>
-      </CardContent> */}
-      <Box style={{ marginTop: "100px", display: "flex", padding: "10px" }}>
-        <Box style={{ flexGrow: "1" }}>
-          {/* <Button
-            style={{ marginRight: "10px" }}
-            variant="contained"
-            color="primary"
-            onClick={func}
-          >
-            Click Me
-          </Button> */}
-          <Button
-            // style={{ margin: "10px" }}
-            variant="contained"
-            color="primary"
-            onClick={() => classroomPage(item.id)}
-          >
-            Enter
-          </Button>
-        </Box>
-        <IconButton aria-label="settings" onClick={() => window.open(item.teacherFolder.alternateLink)}>
-          <DriveFolderUploadIcon  />
-        </IconButton>
-      </Box>
+      <ul>
+        <li>
+          <Typography color="textSecondary" variant="text">
+            Total Classes: {item.totalClasses}
+          </Typography>
+        </li>
+        <li>
+          <Typography color="textSecondary" variant="text">
+            Total Time:{" "}
+            {item.totalDuration > 180
+              ? `${parseInt(item.totalDuration / 60)}hrs ${parseInt(
+                  item.totalDuration % 60
+                )}mins`
+              : `${parseInt(item.totalDuration)}mins`}
+          </Typography>
+        </li>
+        <li>
+          <Typography color="textSecondary" variant="text">
+            Students Enrolled:{" "}
+            {item.StudentsData ? item.StudentsData.length : 0}
+          </Typography>
+        </li>
+      </ul>
+      <Container style={{ margin: "15px 0px" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => classroomPage(item.id)}
+        >
+          Enter
+        </Button>
+      </Container>
     </Card>
   );
 };

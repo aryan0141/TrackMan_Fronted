@@ -20,14 +20,10 @@ import { BACKEND_HOST_URL } from "../../config/default";
 import Cookies from "js-cookie";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-
-// const load = async (email) => {
-//   const resp = await axios.get(`/api/users/courseList/${email}`);
-//   //console.log(resp.data);
-//   return(resp.data);
-// }
+import { useAlert } from "react-alert";
 
 const TeachersPage = () => {
+  const alert = useAlert();
   const userInfo = Cookies.get("userInfo");
   const token = userInfo ? JSON.parse(userInfo).token : null;
   const config = { headers: { Authorization: token } };
@@ -48,16 +44,31 @@ const TeachersPage = () => {
       setClassNameError(true);
       return;
     }
+    // var classFound = false;
+    // for (var i = 0; i < resp.length; i++) {
+    //   if (className.toLowerCase() === resp[i].name) {
+    //     classFound = true;
+    //   }
+    // }
+    // if (classFound) {
+    //   alert.error("Class with that name already exists");
+    //   setClassName("");
+    //   return;
+    // }
+
     const createClass = {
       courseName: className,
       teacherName: JSON.parse(userInfo).email,
     };
     console.log(createClass, config);
-    await axios.post(
+    const newClass = await axios.post(
       `${BACKEND_HOST_URL}/api/createClass`,
       { createClass },
       config
     );
+    resp.push(newClass.data);
+    setResp([...resp]);
+    setClassName("");
   }
 
   function handleClick() {
@@ -78,54 +89,60 @@ const TeachersPage = () => {
     const getItems = async () => {
       try {
         setIsLoading(true);
-        //const response = await axios.get(`${BACKEND_HOST_URL}/api/users/courseList/${user.email}`);
         const userInfo = Cookies.get("userInfo");
-
         const token = JSON.parse(userInfo).token;
-        // console.log(JSON.parse(userInfo).token);
-        // console.log(userInfo.token);
-        // const  token =
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNDcxMmFhNzdhZWM0NjkxNGMyZjU3YSIsImlhdCI6MTY0ODg5NjMwOSwiZXhwIjoxNjQ4OTgyNzA5fQ.qFKyesB1Z9wzjng8G2bYVn5prkC4EoT_FJLRhdouGnU";
         const config = { headers: { Authorization: token } };
-        // console.log(config);
-        // console.log(token);
         const response1 = await axios.get(
           `${BACKEND_HOST_URL}/api/getClasses`,
           config
         );
         if (response1.status === 400) {
-          console.log("error occured here ");
           setPermission(true);
         } else {
-          console.log("no error occured here");
           setResp(response1.data);
           setIsLoading(false);
         }
       } catch (e) {
-        // setPermission(true);
         console.log("error occured  ");
         console.log(e);
       }
     };
 
-    // if (response.data.status === 200) {
-
     getItems();
   }, [user]);
-
-  console.log(resp);
-
-  //console.log(resp);
 
   return (
     <React.Fragment>
       <Navbar />
+      <Container sx={{ display: "flex", margin: "10px 0px" }}>
+        <IconButton onClick={handleClick}>
+          <AddCircleOutlineIcon sx={{ fontSize: 40 }} color="primary" />
+        </IconButton>
+        {showInput ? (
+          <Box sx={{ margin: "auto 10px" }}>
+            <FormControl sx={{ marginRight: "10px" }}>
+              <TextField
+                id="outlined-basic"
+                label="Enter Class Name"
+                variant="outlined"
+                size="small"
+                error={classNameError}
+                value={className}
+                onChange={(e) => setClassName(e.target.value)}
+              />
+            </FormControl>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+              Enter
+            </Button>
+          </Box>
+        ) : null}
+      </Container>
       <Box style={{ margin: "30px" }}>
         <Grid container spacing={2}>
           {!isLoading ? (
             resp && resp.length ? (
               resp.map((item) => (
-                <Grid key={item.id} item xs={12} sm={6} md={6} lg={3}>
+                <Grid key={item._id} item xs={12} sm={6} md={6} lg={3}>
                   <ClassroomCard item={item} />
                 </Grid>
               ))
@@ -151,29 +168,6 @@ const TeachersPage = () => {
             // </p>
           )}
         </Grid>
-      </Box>
-      <Box sx={{ display: "flex", margin: "10px" }}>
-        <IconButton onClick={handleClick}>
-          <AddCircleOutlineIcon sx={{ fontSize: 40 }} color="primary" />
-        </IconButton>
-        {showInput ? (
-          <Box sx={{ margin: "auto 10px" }}>
-            <FormControl sx={{ marginRight: "10px" }}>
-              <TextField
-                id="outlined-basic"
-                label="Enter Class Name"
-                variant="outlined"
-                size="small"
-                error={classNameError}
-                value={className}
-                onChange={(e) => setClassName(e.target.value)}
-              />
-            </FormControl>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
-              Enter
-            </Button>
-          </Box>
-        ) : null}
       </Box>
     </React.Fragment>
   );

@@ -5,8 +5,18 @@ import { TailSpin } from "react-loader-spinner";
 import axios from "axios";
 import { useAlert } from 'react-alert'
 import { BACKEND_HOST_URL } from "../../config/default";
+import Cookies from "js-cookie";
+import { useHistory } from "react-router-dom";
 
 export const ClassWeightage = ({ classData, loader }) => {
+
+  const userInfo = Cookies.get("userInfo");
+  const token = JSON.parse(userInfo).token;
+  const config = { headers: { Authorization: token } };
+
+  const history = useHistory();
+
+
   const [time, setTime] = React.useState(classData.weightAge[0]);
   const [timeError, setTimeError] = React.useState(false);
 
@@ -49,8 +59,8 @@ export const ClassWeightage = ({ classData, loader }) => {
 
     
     const resp = await axios.post(`${BACKEND_HOST_URL}/api/fileNames/updateWeightageArr`, {
-      weightAgeDoc,
-    });
+      weightAgeDoc
+    }, config);
     if (resp.data.status === 200) {
       setTime(time);
       setAttendance(attendance);
@@ -58,7 +68,10 @@ export const ClassWeightage = ({ classData, loader }) => {
       setTimeError(false);
       setAttendanceError(false);
       setCommentsError(false);
-      alert.success('Updated Succesfully')
+      alert.success('Updated Succesfully');
+      setTimeout(() => {
+        history.go(0);
+      }, 500);
     }
   };
 
