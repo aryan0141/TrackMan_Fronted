@@ -77,7 +77,8 @@ const FileUploader = ({ courseName, resp }) => {
           fileName2 = name3.split(" @")[0].trim();
         }
 
-        if (resp.name === fileName2) {
+        //if (resp.name === fileName2) {
+        if (resp.fileNames.includes(fileName2)) {
           sortedArray.push(file[x]);
         } else {
           alert.error("Not a valid File Name");

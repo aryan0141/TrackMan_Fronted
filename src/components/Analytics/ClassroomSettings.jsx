@@ -165,7 +165,7 @@ const ClassroomNames = ({ data, loading }) => {
 
       const res = await axios.post(
         `${BACKEND_HOST_URL}/api/fileNames/addFileName`,
-        { filename }
+        { filename }  , config 
       );
       console.log(res);
       if (res.data.status === 400) {
@@ -191,8 +191,8 @@ const ClassroomNames = ({ data, loading }) => {
           borderRadius: "4px",
         }}
       >
-        {/* Classroom Names */}
-        {/* <Box
+        Classroom Names
+        <Box
           sx={{
             marginBottom: "20px",
           }}
@@ -281,7 +281,7 @@ const ClassroomNames = ({ data, loading }) => {
             border: "none",
             backgroundColor: blue[500],
           }}
-        /> */}
+        />
 
         {/* Cutt off time */}
         <Box
