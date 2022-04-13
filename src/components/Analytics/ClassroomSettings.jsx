@@ -102,7 +102,7 @@ const ClassroomNames = ({ data, loading }) => {
       console.log(filename);
       const res = await axios.post(
         `${BACKEND_HOST_URL}/api/fileNames/deleteFileName`,
-        { filename }
+        { filename } , config
       );
       if (res.data.status === 400) {
         alert.error(res.data.msg);
