@@ -8,13 +8,23 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { userContext } from "../../userContext";
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import {
   blue,
 } from "@mui/material/colors";
 // import { BACKEND_HOST_URL } from "../../config/default";
 import { Container } from "@mui/material";
+import Cookies from "js-cookie";
+import { BACKEND_HOST_URL } from "../../config/default";
 
-const ClassroomCard = ({ item, color }) => {
+
+const userInfo = Cookies.get("userInfo");
+const token = JSON.parse(userInfo).token;
+const config = { headers: { Authorization: token } };
+
+const ClassroomCard = (props) => {
+  const item = props.item;
   const { user, setUser } = useContext(userContext);
   const history = useHistory();
   const classroomPage = () => {
@@ -28,6 +38,11 @@ const ClassroomCard = ({ item, color }) => {
           <Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">
             {item.name[0].toUpperCase()}
           </Avatar>
+        }
+        action={
+          <IconButton aria-label="settings" onClick={() => props.onChange(item.name)}>
+            <DeleteIcon style={{fontSize: "1.9rem"}} />
+          </IconButton>
         }
         titleTypographyProps={{ variant: "h5" }}
         title={item.name[0].toUpperCase() + item.name.slice(1)}

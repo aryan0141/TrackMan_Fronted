@@ -75,6 +75,21 @@ const TeachersPage = () => {
     setShowInput(!showInput);
   }
 
+  async function deleteClassroom(className) {
+    if (window.confirm("Are you sure to delete that classroom?") == true) {
+      const res = await axios.get(
+        `${BACKEND_HOST_URL}/api/deleteClass/${className}`,
+        config
+      );
+      if(res.status === 200) {
+        resp.splice(resp.findIndex(a => a.name === className) , 1);
+        setResp([...resp]);
+      } else {
+        alert("Some error occured! Please try again.")
+      }
+    }
+  }
+
   useEffect(() => {
     if (!user || !user.email) {
       history.push("/");
@@ -143,7 +158,10 @@ const TeachersPage = () => {
             resp && resp.length ? (
               resp.map((item) => (
                 <Grid key={item._id} item xs={12} sm={6} md={6} lg={3}>
-                  <ClassroomCard item={item} />
+                  <ClassroomCard
+                    item={item}
+                    onChange={(data) => deleteClassroom(data)}
+                  />
                 </Grid>
               ))
             ) : (
