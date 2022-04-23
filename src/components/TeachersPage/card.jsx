@@ -18,10 +18,13 @@ import { Container } from "@mui/material";
 import Cookies from "js-cookie";
 import { BACKEND_HOST_URL } from "../../config/default";
 
+// var userInfo = "";
+// var token = "";
+// var config = null;
 
-const userInfo = Cookies.get("userInfo");
-const token = JSON.parse(userInfo).token;
-const config = { headers: { Authorization: token } };
+// const userInfo = Cookies.get("userInfo");
+// const token = JSON.parse(userInfo).token;
+// const config = { headers: { Authorization: token } };
 
 const ClassroomCard = (props) => {
   const item = props.item;
@@ -45,7 +48,8 @@ const ClassroomCard = (props) => {
           </IconButton>
         }
         titleTypographyProps={{ variant: "h5" }}
-        title={item.name[0].toUpperCase() + item.name.slice(1)}
+        // title={item.name[0].toUpperCase() + item.name.slice(1)}
+        title={item.name}
       />
       <ul>
         <li>

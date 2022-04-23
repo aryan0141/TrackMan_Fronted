@@ -191,7 +191,6 @@ const ClassroomNames = ({ data, loading }) => {
           borderRadius: "4px",
         }}
       >
-        Classroom Names
         <Box
           sx={{
             marginBottom: "20px",
