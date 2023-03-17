@@ -1,1 +1,1 @@
-export const BACKEND_HOST_URL="http://20.222.42.84:5000";
+export const BACKEND_HOST_URL="https://trackmanbackend.onrender.com/";
