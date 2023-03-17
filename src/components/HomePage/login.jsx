@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Button, Container, Grid } from "@mui/material";
+import { Button, Container, Grid, Typography } from "@mui/material";
 import { useAlert } from "react-alert";
 import Cookies from "js-cookie";
 
@@ -119,6 +119,9 @@ const Login = () => {
         >
           Login
         </Button>
+        <Typography>Sample Login:</Typography>
+        <Typography>Email: garg.10@iitj.ac.in</Typography>
+        <Typography>Password: abcdefgh</Typography>
       {/* </Container> */}
     </React.Fragment>
   );
