@@ -119,9 +119,6 @@ const Login = () => {
         >
           Login
         </Button>
-        <Typography>Sample Login:</Typography>
-        <Typography>Email: garg.10@iitj.ac.in</Typography>
-        <Typography>Password: abcdefgh</Typography>
       {/* </Container> */}
     </React.Fragment>
   );

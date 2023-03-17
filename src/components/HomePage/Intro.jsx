@@ -189,6 +189,17 @@ const Intro = () => {
             <br />
             {showLogin ? <Login /> : null}
             {showSignup ? <Signup /> : null}
+{/* 
+            {showLogin ? <Typography>Sample Login:</Typography> : null}
+            {showLogin ? <Typography>Email: garg.10@iitj.ac.in</Typography> : null}
+            {showLogin ? <Typography>Password: abcdefgh</Typography> : null} */}
+
+            <Typography style={{fontWeight: "600"}}>Sample Login:</Typography>
+            <Typography>Email: garg.10@iitj.ac.in</Typography>
+            <Typography>Password: abcdefgh</Typography>
+            
+            
+            
             {/* {loginSignUp === "login" ? <Login /> : <Signup />} */}
           </Box>
         </Grid>
