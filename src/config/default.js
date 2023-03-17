@@ -1,1 +1,1 @@
-export const BACKEND_HOST_URL="https://trackmanbackend.onrender.com/";
+export const BACKEND_HOST_URL="https://trackmanbackend.onrender.com";
